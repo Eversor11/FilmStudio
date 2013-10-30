@@ -1,0 +1,14 @@
+Aihe: FilmStudio -managerointi/simulointipelin elokuvahistorian luonti ja selaus
+
+Toteutetaan osakokonaisuus uuden pelin käynnistämisestä, jossa proseduraalisesti luodaan
+tähän vuoteen asti X-määrä elokuvia ja henkilöitä niihin. Henkilöille generoidaan nimi, ikä,
+positio (näyttelijä, ohjaaja, käsikirjoittaja) ja historia missä elokuvissa ollut mukana.
+Elokuville generoidaan nimi, genre, tuotantovuosi ja rating. Käyttöliittymä tulee olemaan
+hakuikkuna, josta voi hakusanoilla etsiä henkilöitä ja elokuvia. Niitä klikkaamalla avautuu
+uusi ikkuna, josta voi tarkastella koottuja tietoja.
+
+Käyttäjät: Pelaaja
+
+Pelaajan toiminnot: Henkilöiden ja elokuvien selaus sekä nimihaku, koottujen tietojen selaus
+
+Pelin sisäiset toiminnot: Elokuvien ja henkilöiden generointi, nimihaku annetulla hakusanalla
