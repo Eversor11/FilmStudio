@@ -10,10 +10,12 @@ import static org.junit.Assert.*;
 public class MovieMakerTest {
     
     MovieMaker movieMaker;
+    Movie random;
 
     @Before
     public void setUp() {
         movieMaker = new MovieMaker();
+        random = movieMaker.newRandom();
     }
     
     @Test
@@ -23,38 +25,28 @@ public class MovieMakerTest {
     
     @Test
     public void currentYearIncrementedCorrectly(){
-        
         movieMaker.incrementCurrentYear();
-        int incrementedYear = movieMaker.getCurrentYear();
         
-        assertEquals(Calendar.getInstance().get(Calendar.YEAR)+1, incrementedYear);      
+        assertEquals(Calendar.getInstance().get(Calendar.YEAR)+1, movieMaker.getCurrentYear());      
     }
     
     @Test
-    public void randomMovieTitleNotNull(){
-        Movie random = movieMaker.newRandom();
-        
+    public void randomMovieTitleNotNull(){ 
         assertNotNull(random.getTitle());
     }
     
     @Test
     public void randomMovieGenreNotNull(){
-        Movie random = movieMaker.newRandom();
-        
         assertNotNull(random.getGenre());
     }
     
     @Test
     public void randomMovieYearOver1950(){
-        Movie random = movieMaker.newRandom();
-        
         assertTrue(random.getYear() >= 1950);
     }
     
     @Test
     public void randomMovieRatingsGreaterThanZeroAndNotOver10(){
-        Movie random = movieMaker.newRandom();
-        
         assertTrue(random.getRatings() <= 10 && random.getRatings() > 0);
     }
 
