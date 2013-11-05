@@ -1,3 +1,6 @@
 28.10.2013 1h GitHub koneelle ja git-treeniä
 29.10.2013 1h Loput Deadline 1:stä
 30.10.2013 1h Aihe muutettiin toiseksi, uusi repokansio ja deadline 1 tehty loppuun
+04.11.2013 4h Koodausta ja sanojen etsimistä
+05.11.2013 1h Luokkakaavio
+05.11.2013 2h jUnit teoriaa ja testien luomista
