@@ -1,19 +1,22 @@
 package filmstudio.movies;
 
+import filmstudio.utilities.FileReader;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 public class MovieMaker {
 
     private int currentYear;
-    private String[] genres = {"Action", "Comedy"};
+    private List<String> genres;
     private TitleGenerator titleGenerator;
     private Random random;
 
-    public MovieMaker() {
+    public MovieMaker(FileReader fileReader, Random random) throws Exception {
         this.currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        titleGenerator = new TitleGenerator();
-        random = new Random();
+        this.random = random;
+        this.genres = fileReader.readFile("src/filmstudio/movies/genres.txt");       
+        titleGenerator = new TitleGenerator(fileReader, random);
     }
     
     public int getCurrentYear(){
@@ -24,7 +27,7 @@ public class MovieMaker {
         this.currentYear++;
     }
 
-    public Movie newRandom() {
+    public Movie newRandom() throws Exception {
 
         int year = year();
         String genre = genre();
@@ -34,7 +37,7 @@ public class MovieMaker {
         return new Movie(title, year, genre, ratings);
     }
 
-    private String generateTitle(String genre) {
+    private String generateTitle(String genre) throws Exception {
         return titleGenerator.generateTitle("src/filmstudio/movies/" + genre + "_adjectives.txt",
                                             "src/filmstudio/movies/" + genre + "_nouns.txt");
     }
@@ -44,7 +47,7 @@ public class MovieMaker {
     }
 
     private String genre() {
-        return genres[random.nextInt(genres.length)];
+        return genres.get(random.nextInt(genres.size()));
     }
 
     private double ratings() {

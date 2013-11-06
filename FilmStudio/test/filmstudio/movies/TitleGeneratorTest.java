@@ -1,6 +1,8 @@
 
 package filmstudio.movies;
 
+import filmstudio.utilities.FileReader;
+import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -9,18 +11,34 @@ import static org.junit.Assert.*;
 public class TitleGeneratorTest {
     
     TitleGenerator titleGenerator;
+    FileReader fileReader;
+    Random random;
     
     @Before
     public void setUp() {
-        titleGenerator = new TitleGenerator();
+        fileReader = new FileReader();
+        random = new Random(1);
+        titleGenerator = new TitleGenerator(fileReader, random);
     }
     
     @Test
-    public void titleGeneratedCorrectly(){
+    public void title1GeneratedCorrectly() throws Exception {
         String title = titleGenerator.generateTitle("test/filmstudio/movies/test-adjective.txt", 
                                                     "test/filmstudio/movies/test-noun.txt");
         
-        assertTrue(title.equals("adjective noun") || title.equals("The noun"));
+        assertEquals("adjective noun", title);
+    }
+    
+    @Test
+    public void title2GeneratedCorrectly() throws Exception {
+        for(int i = 0; i < 13; i++){
+            random.nextInt();
+        }
+        
+        String title = titleGenerator.generateTitle("test/filmstudio/movies/test-adjective.txt", 
+                                                    "test/filmstudio/movies/test-noun.txt");
+        
+        assertEquals("The noun", title);
     }
 
 }

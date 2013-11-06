@@ -9,12 +9,12 @@ public class TitleGenerator {
     private Random random;
     private FileReader fileReader;
 
-    public TitleGenerator() {
-        random = new Random();
-        fileReader = new FileReader();
+    public TitleGenerator(FileReader fileReader, Random random) {
+        this.fileReader = fileReader;
+        this.random = random;
     }
 
-    public String generateTitle(String adjectivesPath, String nounsPath) {
+    public String generateTitle(String adjectivesPath, String nounsPath) throws Exception {
         String title = "";
 
         List<String> adjectiveList = fileReader.readFile(adjectivesPath);

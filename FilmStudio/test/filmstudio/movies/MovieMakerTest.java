@@ -1,7 +1,9 @@
 
 package filmstudio.movies;
 
+import filmstudio.utilities.FileReader;
 import java.util.Calendar;
+import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -9,13 +11,17 @@ import static org.junit.Assert.*;
 
 public class MovieMakerTest {
     
+    FileReader fileReader;
     MovieMaker movieMaker;
-    Movie random;
+    Movie randomMovie;
+    Random random;
 
     @Before
-    public void setUp() {
-        movieMaker = new MovieMaker();
-        random = movieMaker.newRandom();
+    public void setUp() throws Exception {
+        this.fileReader = new FileReader();
+        this.random = new Random(1);
+        movieMaker = new MovieMaker(fileReader, random);
+        randomMovie = movieMaker.newRandom();
     }
     
     @Test
@@ -31,23 +37,23 @@ public class MovieMakerTest {
     }
     
     @Test
-    public void randomMovieTitleNotNull(){ 
-        assertNotNull(random.getTitle());
+    public void randomMovieTitleCorrectlyGenerated(){ 
+        assertEquals("Hard Battle", randomMovie.getTitle());
     }
     
     @Test
-    public void randomMovieGenreNotNull(){
-        assertNotNull(random.getGenre());
+    public void randomMovieGenreCorrectlyGenerated(){
+        assertEquals("Action", randomMovie.getGenre());
     }
     
     @Test
-    public void randomMovieYearOver1950(){
-        assertTrue(random.getYear() >= 1950);
+    public void randomMovieYearCorrectlyGenerated(){
+        assertEquals(1967, randomMovie.getYear());
     }
     
     @Test
-    public void randomMovieRatingsGreaterThanZeroAndNotOver10(){
-        assertTrue(random.getRatings() <= 10 && random.getRatings() > 0);
+    public void randomMovieRatingsCorrectlyGenerated(){
+        assertEquals(2.4, randomMovie.getRatings(), 0);
     }
 
 }
