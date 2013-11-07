@@ -15,6 +15,10 @@ public class MovieMakerTest {
     MovieMaker movieMaker;
     Movie randomMovie;
     Random random;
+    
+    /* Päädyin käyttämään seedattua randomia mockauksen sijaan, koska
+     * haluan selvitä ilman ulkopuolisia kirjastoja
+     */
 
     @Before
     public void setUp() throws Exception {
@@ -37,8 +41,8 @@ public class MovieMakerTest {
     }
     
     @Test
-    public void randomMovieTitleCorrectlyGenerated(){ 
-        assertEquals("Hard Battle", randomMovie.getTitle());
+    public void randomMovieYearCorrectlyGenerated(){
+        assertEquals(1967, randomMovie.getYear());
     }
     
     @Test
@@ -47,9 +51,9 @@ public class MovieMakerTest {
     }
     
     @Test
-    public void randomMovieYearCorrectlyGenerated(){
-        assertEquals(1967, randomMovie.getYear());
-    }
+    public void randomMovieTitleCorrectlyGenerated(){ 
+        assertEquals("Hard Battle", randomMovie.getTitle());
+    }  
     
     @Test
     public void randomMovieRatingsCorrectlyGenerated(){

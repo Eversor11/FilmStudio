@@ -11,6 +11,10 @@ public class FileReader {
     }
 
     public List<String> readFile(String path) throws Exception {
+        
+        /* Päädyin heittämään exceptionia system.exitin sijaan, koska
+         * exceptionin odotus on helpompi ottaa huomioon testauksessa
+         */
 
         File file = new File(path);
         List<String> lines = new ArrayList<String>();
