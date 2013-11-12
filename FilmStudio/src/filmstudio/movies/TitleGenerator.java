@@ -20,9 +20,7 @@ public class TitleGenerator {
         List<String> adjectiveList = fileReader.readFile(adjectivesPath);
         List<String> nounList = fileReader.readFile(nounsPath);
 
-        int dice = random.nextInt(9);
-
-        if (dice > 0) {
+        if (random.nextInt(9) > 0) {
             title = adjectiveNoun(adjectiveList, nounList);
         } else {
             title = articleNoun(nounList);
