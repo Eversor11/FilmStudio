@@ -5,3 +5,5 @@
 05.11.2013 1h Luokkakaavio
 05.11.2013 2h jUnit teoriaa ja testien luomista
 06.11.2013 2h Testien, koodin ja luokkakaavion viilausta
+11.11.2013 3h Koodausta ja nimilistojen etsimistä
+12.11.2013 2h Koodausta, jUnit-testejä, luokkakaavion päivitys ja ensimmäinen JavaDoc
