@@ -19,7 +19,7 @@ public class PersonCreatorTest {
         fileReader = new FileReader();
         random = new Random(1);
         personCreator = new PersonCreator(fileReader, random);
-        randomPerson = personCreator.newRandom();
+        randomPerson = personCreator.newRandom(1);
     }
     
     @Test
@@ -39,7 +39,7 @@ public class PersonCreatorTest {
     
     @Test
     public void randomPersonAgeCorrectlyGenerated(){
-        assertEquals(25, randomPerson.getAge());
+        assertEquals(26, randomPerson.getAge());
     }
 
 }

@@ -7,3 +7,4 @@
 06.11.2013 2h Testien, koodin ja luokkakaavion viilausta
 11.11.2013 3h Koodausta ja nimilistojen etsimistä
 12.11.2013 2h Koodausta, jUnit-testejä, luokkakaavion päivitys ja ensimmäinen JavaDoc
+14.11.2013 4h Koodausta, jUnit-testejä ja luokkakaavion päivitys

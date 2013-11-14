@@ -19,13 +19,13 @@ public class PersonCreator {
         femaleNames = fileReader.readFile("src/filmstudio/persons/femaleNames.txt");
         surnames = fileReader.readFile("src/filmstudio/persons/surnames.txt");
     }
-
-    public Person newRandom() throws Exception {
+    
+    public Person newRandom(int addedAge) throws Exception {
 
         String gender = gender();
         String firstName = firstName(gender);
         String surname = surname();
-        int age = age();
+        int age = age()+addedAge;
 
         return new Person(gender, firstName, surname, age);
     }
