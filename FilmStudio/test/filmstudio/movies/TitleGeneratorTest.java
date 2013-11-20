@@ -31,16 +31,16 @@ public class TitleGeneratorTest {
     
     @Test
     public void title1GeneratedCorrectly() throws Exception {
-        String title = titleGenerator1.generateTitle("test/filmstudio/movies/test-adjective.txt", 
-                                                     "test/filmstudio/movies/test-noun.txt");
+        String title = titleGenerator1.generateTitle("test/resources/movies/test-adjective.txt", 
+                                                     "test/resources/movies/test-noun.txt");
         
         assertEquals("adjective noun", title);
     }
     
     @Test
     public void title2GeneratedCorrectly() throws Exception {
-        String title = titleGenerator2.generateTitle("test/filmstudio/movies/test-adjective.txt", 
-                                                     "test/filmstudio/movies/test-noun.txt");
+        String title = titleGenerator2.generateTitle("test/resources/movies/test-adjective.txt", 
+                                                     "test/resources/movies/test-noun.txt");
         
         assertEquals("The noun", title);
     }

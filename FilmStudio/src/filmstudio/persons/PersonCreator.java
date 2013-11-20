@@ -4,6 +4,11 @@ import filmstudio.utilities.FileReader;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * PersonCreator-luokka, jonka avulla voidaan generoida henkilöitä
+ *
+ * @author Eversor
+ */
 public class PersonCreator {
 
     private Random random;
@@ -15,17 +20,17 @@ public class PersonCreator {
     public PersonCreator(FileReader fileReader, Random random) throws Exception {
         this.random = random;
         nameGenerator = new NameGenerator(random);
-        maleNames = fileReader.readFile("src/filmstudio/persons/maleNames.txt");
-        femaleNames = fileReader.readFile("src/filmstudio/persons/femaleNames.txt");
-        surnames = fileReader.readFile("src/filmstudio/persons/surnames.txt");
+        maleNames = fileReader.readFile("src/resources/persons/maleNames.txt");
+        femaleNames = fileReader.readFile("src/resources/persons/femaleNames.txt");
+        surnames = fileReader.readFile("src/resources/persons/surnames.txt");
     }
-    
+
     public Person newRandom(int addedAge) throws Exception {
 
         String gender = gender();
         String firstName = firstName(gender);
         String surname = surname();
-        int age = age()+addedAge;
+        int age = age() + addedAge;
 
         return new Person(gender, firstName, surname, age);
     }

@@ -4,16 +4,42 @@ import filmstudio.utilities.FileReader;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * TitleGenerator-luokka, jonka avulla voidaan generoida elokuvien nimiä
+ * annetuista tiedostopoluista
+ *
+ * @author Eversor
+ */
 public class TitleGenerator {
 
     private Random random;
     private FileReader fileReader;
 
+    /**
+     * Konstruktori, jolle annetaan parametreinä FileReader- ja Random-luokkien
+     * ilmentymät, jotka asetetaan niiden private muuttujiin.
+     * 
+     * @param fileReader FileReader-luokan ilmentymä, jonka avulla voidaan lukea
+     *                   tiedostojen sisältöä
+     * @param random     Random-luokan ilmentymä satunnaislukujen arpomiseen
+     */
     public TitleGenerator(FileReader fileReader, Random random) {
         this.fileReader = fileReader;
         this.random = random;
     }
 
+    /**
+     * Metodi, joka generoi elokuvan nimen annettujen tiedostopolkujen
+     * perusteella. Aluksi luetaan annetuista tiedostopoluista sanat joiden
+     * avulla generoidaan, jonka jälkeen arvotaan tyyli millä elokuvan nimi
+     * generoituu. Lopuksi palautetaan merkkijonona generoitu elokuvan nimi.
+     * 
+     * @param adjectivesPath Tiedostopolku merkkijonona adjektiiveille
+     * @param nounsPath Tiedostopolku merkkijonona substantiiveille
+     * @return Palauttaa merkkijonona generoidun nimen elokuvalle
+     * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
+     *                   epäonnistuttua
+     */
     public String generateTitle(String adjectivesPath, String nounsPath) throws Exception {
         String title = "";
 

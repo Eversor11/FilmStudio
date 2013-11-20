@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * FileReader-luokka, jonka avulla voidaan lukea tiedostoista tietoa
+ *
+ * @author Eversor
+ */
 public class FileReader {
 
     public FileReader() {

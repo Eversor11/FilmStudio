@@ -8,3 +8,7 @@
 11.11.2013 3h Koodausta ja nimilistojen etsimistä
 12.11.2013 2h Koodausta, jUnit-testejä, luokkakaavion päivitys ja ensimmäinen JavaDoc
 14.11.2013 4h Koodausta, jUnit-testejä ja luokkakaavion päivitys
+17.11.2013 1h Koodausta ja txt-tiedostot resources kansioihin
+18.11.2013 3h Koodausta ja luokkakaavion päivitys
+19.11.2013 6h Koodausta, jUnit-testejä ja GUI-säätöä
+20.11.2013 4h GUI-säätöä ja JavaDocia

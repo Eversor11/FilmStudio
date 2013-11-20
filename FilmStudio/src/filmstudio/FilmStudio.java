@@ -1,12 +1,20 @@
 package filmstudio;
 
+import filmstudio.data.DataSearch;
 import filmstudio.data.Database;
 import filmstudio.data.HistoryGenerator;
+import filmstudio.gui.SearchUI;
 import filmstudio.movies.MovieMaker;
 import filmstudio.persons.PersonCreator;
 import filmstudio.utilities.FileReader;
 import java.util.Random;
 
+/**
+ * FilmStudio-luokka, joka luo peliin tarvittavat ilmentymät luokista ja
+ * käyttöliittymän
+ *
+ * @author Eversor
+ */
 public class FilmStudio {
 
     public static void main(String[] args) {
@@ -14,6 +22,7 @@ public class FilmStudio {
         Random random = new Random();
         FileReader fileReader = new FileReader();
         Database database = new Database();
+        DataSearch dataSearch = new DataSearch(database);
         MovieMaker movieMaker;
         PersonCreator personCreator;
         HistoryGenerator historyGenerator;
@@ -27,7 +36,8 @@ public class FilmStudio {
             System.out.println("Error: " + e.getMessage());
         }
         
-        System.out.println(database.showAllMovies());
-        System.out.println(database.showAllPersons());
+        SearchUI searchUI = new SearchUI(database);
+        searchUI.setLocationRelativeTo(null);
+        searchUI.setVisible(true);
     }
 }

@@ -16,12 +16,12 @@ public class FileReaderTest {
 
     @Test (expected = Exception.class)
     public void fileNotFoundThrowsException() throws Exception {
-        List<String> lines = fileReader.readFile("test/filmstudio/utilities/notfound.txt");
+        List<String> lines = fileReader.readFile("test/resources/utilities/notfound.txt");
     }
 
     @Test
     public void linesReadMatchTheContent() throws Exception {
-        List<String> lines = fileReader.readFile("test/filmstudio/utilities/test.txt");
+        List<String> lines = fileReader.readFile("test/resources/utilities/test.txt");
 
         assertEquals("first", lines.get(0));
         assertEquals("second", lines.get(1));

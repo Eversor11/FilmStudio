@@ -4,37 +4,40 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * NameGenerator-luokka, joka generoi annetulta listalta nimiä
- * 
+ * NameGenerator-luokka, jonka avulla voidaan generoida annetulta listalta nimiä
+ *
  * @author Eversor
  */
-
 public class NameGenerator {
-    
+
     /**
      * Satunnaislukugeneraattori satunnaislukujen arpomiseen
      */
-
     private Random random;
 
+    /**
+     * Konstruktori, jolle annetaan Random-luokan ilmentymä. Ilmentymä asetetaan
+     * sen private muuttujaan.
+     * 
+     * @param random Random-luokan ilmentymä satunnaislukujen arpomiseen
+     */
     public NameGenerator(Random random) {
         this.random = random;
     }
-    
+
     /**
-     * Metodi generoi annetulta listalta nimen, jonka frekvenssi
-     * on annettujen kvartiilien mukainen eli saadaan populaation
-     * frekvenssin mukaisesti generoitua nimiä
-     * 
+     * Metodi generoi annetulta listalta nimen, jonka frekvenssi on annettujen
+     * kvartiilien mukainen eli saadaan populaation frekvenssin mukaisesti
+     * generoitua nimiä
+     *
      * @param names Lista nimiä, joista valitaan generoitava nimi
      * @param Q1 Viimeinen alkio, joka kuuluu ensimmäiseen kvartiiliin
      *           (Alkioiden järjestysluku alkaa yhdestä)
      * @param Q2 Viimeinen alkio, joka kuuluu toiseen kvartiiliin
      * @param Q3 Viimeinen alkio, joka kuuluu kolmanteen kvartiiliin
-     * 
+     *
      * @return Populaation frekvenssin mukaan generoitu nimi
      */
-
     public String generateName(List<String> names, int Q1, int Q2, int Q3) {
 
         int dice1 = random.nextInt(100) + 1;

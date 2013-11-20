@@ -5,6 +5,11 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * MovieMaker-luokka, jonka avulla voidaan generoida elokuvia
+ *
+ * @author Eversor
+ */
 public class MovieMaker {
 
     private int currentYear;
@@ -12,21 +17,52 @@ public class MovieMaker {
     private TitleGenerator titleGenerator;
     private Random random;
 
+    /**
+     * Konstruktori, jolle annetaan parametreinä FileReader- ja Random-luokkien
+     * ilmentymät. Ensin nykyisen vuoden private muuttujaan asetetaan Calendar-
+     * luokasta kutsuttu vuosiluku, jonka jälkeen Random-luokan ilmentymä 
+     * asetetaan sen private muuttujaan. Genreille tarkoitettuun listaan luetaan
+     * FileReader-luokan ilmentymän avulla tiedostosta elokuvien mahdolliset
+     * genret. Lopuksi luodaan uusi TitleGenerator-luokan ilmentymä, jolle
+     * annetaan parametreina FileReader- ja Random-luokkien ilmentymät ja tämä
+     * asetetaan sen private muuttujaan.
+     * 
+     * @param fileReader FileReader-luokan ilmentymä, jonka avulla voidaan lukea
+     *                   tiedostojen sisältöä
+     * @param random     Random-luokan ilmentymä satunnaislukujen arpomiseen
+     * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
+     *                   epäonnistuttua
+     */
     public MovieMaker(FileReader fileReader, Random random) throws Exception {
         this.currentYear = Calendar.getInstance().get(Calendar.YEAR);
         this.random = random;
-        this.genres = fileReader.readFile("src/filmstudio/movies/genres.txt");       
+        this.genres = fileReader.readFile("src/resources/movies/genres.txt");
         titleGenerator = new TitleGenerator(fileReader, random);
     }
-    
-    public int getCurrentYear(){
+
+    public int getCurrentYear() {
         return this.currentYear;
     }
 
+    /**
+     * Metodi, joka kasvattaa nykyistä vuotta yhdellä.
+     * 
+     */
     public void incrementCurrentYear() {
         this.currentYear++;
     }
 
+    /**
+     * Metodi, joka generoi uuden elokuvan. Ensin generoidaan elokuvan julkaisu-
+     * vuosi, jonka jälkeen generoidaan elokuvan genre. Seuraavaksi generoidaan
+     * elokuvan nimi genren perusteella, jonka jälkeen generoidaan elokuvan
+     * arvosanojen keskiarvo. Lopuksi palautetaan kyseisillä tiedoilla luotu
+     * elokuvan ilmentymä.
+     * 
+     * @return Palautetaan elokuvan ilmentymä generoiduilla tiedoilla
+     * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
+     *                   epäonnistuttua elokuvan nimen generoinnissa
+     */
     public Movie newRandom() throws Exception {
 
         int year = year();
@@ -38,8 +74,8 @@ public class MovieMaker {
     }
 
     private String generateTitle(String genre) throws Exception {
-        return titleGenerator.generateTitle("src/filmstudio/movies/" + genre + "_adjectives.txt",
-                                            "src/filmstudio/movies/" + genre + "_nouns.txt");
+        return titleGenerator.generateTitle("src/resources/movies/" + genre + "_adjectives.txt",
+                "src/resources/movies/" + genre + "_nouns.txt");
     }
 
     private int year() {

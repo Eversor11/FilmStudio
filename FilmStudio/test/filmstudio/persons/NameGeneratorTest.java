@@ -39,7 +39,7 @@ public class NameGeneratorTest {
         nameGenerator2 = new NameGenerator(random2);
         nameGenerator3 = new NameGenerator(random3);
         nameGenerator4 = new NameGenerator(random4);
-        test = fileReader.readFile("test/filmstudio/persons/test.txt");
+        test = fileReader.readFile("test/resources/persons/test.txt");
     }
     
     @Test
