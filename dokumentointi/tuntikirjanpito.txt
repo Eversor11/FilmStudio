@@ -11,4 +11,4 @@
 17.11.2013 1h Koodausta ja txt-tiedostot resources kansioihin
 18.11.2013 3h Koodausta ja luokkakaavion päivitys
 19.11.2013 6h Koodausta, jUnit-testejä ja GUI-säätöä
-20.11.2013 4h GUI-säätöä ja JavaDocia
+21.11.2013 2h Koodin viilausta, JavaDocia ja sekvenssikaaviot
