@@ -141,7 +141,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable() {&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {&#xa;        Component c = super.prepareRenderer(renderer, row, column);&#xa;        JComponent jc = (JComponent) c;&#xa;&#xa;        if (isRowSelected(row)) {&#xa;            jc.setBorder(new MatteBorder(1, 0, 1, 0, new Color(99, 130, 191)));&#xa;        }&#xa;&#xa;        return c;&#xa;    }&#xa;}"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable() {&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {&#xa;        Component c = super.prepareRenderer(renderer, row, column);&#xa;        JComponent jc = (JComponent) c;&#xa;&#xa;        if (isRowSelected(row)) {&#xa;            jc.setBorder(selectionBorder);&#xa;        }&#xa;&#xa;        return c;&#xa;    }&#xa;}"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
@@ -203,7 +203,7 @@
                   </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="DefaultTableCellRenderer centerRendererMovie = new DefaultTableCellRenderer();&#xa;centerRendererMovie.setHorizontalAlignment(JLabel.CENTER);&#xa;&#xa;for (int i = 0; i &lt; 4; i++) {&#xa;    movieTable.getColumnModel().getColumn(i).setCellRenderer(centerRendererMovie);&#xa;}&#xa;&#xa;movieTable.getColumnModel().getColumn(1).setPreferredWidth(0);&#xa;movieTable.getColumnModel().getColumn(3).setPreferredWidth(0);"/>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable() {&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {&#xa;        Component c = super.prepareRenderer(renderer, row, column);&#xa;        JComponent jc = (JComponent) c;&#xa;&#xa;        if (isRowSelected(row)) {&#xa;            jc.setBorder(new MatteBorder(1, 0, 1, 0, new Color(99, 130, 191)));&#xa;        }&#xa;&#xa;        return c;&#xa;    }&#xa;}"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable() {&#xa;    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {&#xa;        Component c = super.prepareRenderer(renderer, row, column);&#xa;        JComponent jc = (JComponent) c;&#xa;&#xa;        if (isRowSelected(row)) {&#xa;            jc.setBorder(selectionBorder);&#xa;        }&#xa;&#xa;        return c;&#xa;    }&#xa;}"/>
                   </AuxValues>
                 </Component>
               </SubComponents>

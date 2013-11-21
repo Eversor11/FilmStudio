@@ -17,7 +17,7 @@ public class PersonTest {
         person2 = new Person("Male", "Arnold", "Donitsi", 42);
         movie = new Movie("Bad Grandpa", 2013, "Comedy", 7.0);
         movie.addToCastAndCrew("Director", person);
-        person.addMovie(movie);
+        person.addMovie(movie, "Director");
     }
 
     @Test
@@ -26,6 +26,12 @@ public class PersonTest {
                      + "Bad Grandpa (2013) - Director\n", person.allInfo());
     }
 
+    @Test
+    public void growsOlderCorrectly() {
+        person.growOlder();
+        assertEquals(43, person.getAge());
+    }
+    
     @Test
     public void fameAddedCorrectlyToExistingPosition() {
         person.addFameToPosition("Director", 10);
@@ -55,7 +61,7 @@ public class PersonTest {
     
     @Test
     public void noDuplicateMovies(){
-        person.addMovie(movie);
+        person.addMovie(movie, "Lead Actor");
         assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\nMovies involved in:\n"
                      + "Bad Grandpa (2013) - Director\n", person.allInfo());
     }

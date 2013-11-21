@@ -15,12 +15,17 @@ public class FileReader {
     public FileReader() {
     }
 
+    /**
+     * Metodi, joka lukee parametrina annetusta tiedostopolusta rivi kerrallaan
+     * merkkijonona tietoa listaan. Tiedoston sisältö merkkijono-listana
+     * palautetaan lopuksi.
+     * 
+     * @param path Tiedostopolku merkkijonona, josta tietoa luetaan
+     * @return Palauttaa tiedoston sisällön merkkijono-listana
+     * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
+     *                   epäonnistuttua
+     */
     public List<String> readFile(String path) throws Exception {
-        
-        /* Päädyin heittämään exceptionia system.exitin sijaan, koska
-         * exceptionin odotus on helpompi ottaa huomioon testauksessa
-         */
-
         File file = new File(path);
         List<String> lines = new ArrayList<String>();
 
@@ -30,7 +35,6 @@ public class FileReader {
             String line = reader.nextLine();
             lines.add(line);
         }
-
         reader.close();
 
         return lines;

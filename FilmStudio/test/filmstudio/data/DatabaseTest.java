@@ -18,7 +18,7 @@ public class DatabaseTest {
         movie = new Movie("Bad Grandpa", 2013, "Comedy", 7.0);
         person = new Person("Male", "Arnold", "Donitsi", 42);
         movie.addToCastAndCrew("Director", person);
-        person.addMovie(movie);
+        person.addMovie(movie, "Director");
         database.addMovie(movie);
         database.addPerson(person);
     }

@@ -122,6 +122,14 @@ public class Movie implements Comparable<Movie> {
         return this.title;
     }
 
+    /**
+     * Metodi, joka vertailee kahden elokuvan nimiä ja palauttaa vertailun 
+     * tuloksen kokonaislukuna. Aakkosissa ensin oleva elokuva saa positiivisen
+     * arvon.
+     * 
+     * @param movie Elokuva, jota vertaillaan
+     * @return Palauttaa kokonaislukunu vertailun tuloksen
+     */
     @Override
     public int compareTo(Movie movie) {
         return this.title.compareTo(movie.getTitle());

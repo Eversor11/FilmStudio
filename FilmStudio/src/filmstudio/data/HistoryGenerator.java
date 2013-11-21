@@ -52,8 +52,8 @@ public class HistoryGenerator {
      * elokuvien lukumäärän perusteella. For-loopin alussa generoidaan uusi
      * elokuva. Tämän jälkeen generoidaan listalle henkilöt, jotka ovat
      * tehneet elokuvaa, jonka jälkeen ne asetetaan elokuvan toimihenkilöiksi.
-     * Toimihenkilöille lisätään generoitu elokuva henkilötietoihin ja lopuksi
-     * elokuva lisätään databaseen.
+     * Toimihenkilöille lisätään generoitu elokuva ja siinä käytetty toiminimi
+     * henkilötietoihin ja lopuksi elokuva lisätään databaseen.
      * 
      * @param movieCount Elokuvien lukumäärä joka generoidaan
      * @throws Exception Mahdollinen poikkeus, joka heitetään elokuvien tai
@@ -65,7 +65,7 @@ public class HistoryGenerator {
             List<Person> castAndCrew = createCastAndCrew(movie, castAndCrewPositions.size());
             for(int j = 0; j < castAndCrewPositions.size(); j++){
                 movie.addToCastAndCrew(castAndCrewPositions.get(j), castAndCrew.get(j));
-                castAndCrew.get(j).addMovie(movie);
+                castAndCrew.get(j).addMovie(movie,castAndCrewPositions.get(j));
             }
             database.addMovie(movie);
         }

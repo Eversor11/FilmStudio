@@ -28,11 +28,13 @@ public class SearchUI extends javax.swing.JFrame {
     private List<Person> persons;
     private MovieModel movieModel;
     private PersonModel personModel;
+    private MatteBorder selectionBorder;
     
     public SearchUI(Database database) {
         dataSearch = new DataSearch(database);
         movieModel = new MovieModel(movies);
         personModel = new PersonModel(persons);
+        selectionBorder = new MatteBorder(1, 0, 1, 0, new Color(99, 130, 191));
         
         initComponents();
     }
@@ -58,7 +60,7 @@ public class SearchUI extends javax.swing.JFrame {
                 JComponent jc = (JComponent) c;
 
                 if (isRowSelected(row)) {
-                    jc.setBorder(new MatteBorder(1, 0, 1, 0, new Color(99, 130, 191)));
+                    jc.setBorder(selectionBorder);
                 }
 
                 return c;
@@ -72,7 +74,7 @@ public class SearchUI extends javax.swing.JFrame {
                 JComponent jc = (JComponent) c;
 
                 if (isRowSelected(row)) {
-                    jc.setBorder(new MatteBorder(1, 0, 1, 0, new Color(99, 130, 191)));
+                    jc.setBorder(selectionBorder);
                 }
 
                 return c;
