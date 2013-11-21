@@ -30,6 +30,18 @@ public class SearchUI extends javax.swing.JFrame {
     private PersonModel personModel;
     private MatteBorder selectionBorder;
     
+    /**
+     * Konstruktori, jolle annetaan parametrina Database-luokan ilmentymä, joka
+     * asetetaan sen private muuttujaan. Ensin luodaan uusi ilmentymä
+     * MovieModel-luokasta nullilla elokuvalistalla ja asetetaan se sen private
+     * muuttujaan. Sitten luodaan uusi ilmentymä PersonModel-luokasta nullilla
+     * henkilölistalla ja asetetaan se sen private muuttujaan. Lopuksi luodaan
+     * uusi ilmentymä MatteBorder-luokasta, joka toimii taulukon valintarivin
+     * reunana ja asetetaan se sen private muuttujaan.
+     * 
+     * @param database Database-luokan ilmentymä, joka pitää sisällään tiedot
+     *                 pelissä olevista henkilöistä ja elokuvista
+     */
     public SearchUI(Database database) {
         dataSearch = new DataSearch(database);
         movieModel = new MovieModel(movies);
