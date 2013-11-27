@@ -13,3 +13,7 @@
 19.11.2013 6h Koodausta, jUnit-testejä ja GUI-säätöä
 20.11.2013 4h GUI-säätöä ja JavaDocia
 21.11.2013 2h Koodin viilausta, JavaDocia ja sekvenssikaaviot
+24.11.2013 1h GUI-säätöä
+25.11.2013 2h GUI-säätöä
+26.11.2013 3h GUI-säätöä
+27.11.2013 4h GUI-säätöä

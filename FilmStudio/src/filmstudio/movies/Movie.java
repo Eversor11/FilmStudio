@@ -11,7 +11,7 @@ import java.util.Map.Entry;
  *
  * @author Eversor
  */
-public class Movie implements Comparable<Movie> {
+public class Movie implements Comparable<Movie>, Cloneable {
 
     private String title;
     private int year;
@@ -51,6 +51,10 @@ public class Movie implements Comparable<Movie> {
 
     public double getRatings() {
         return this.ratings;
+    }
+    
+    public Map<String, Person> getCastAndCrew(){
+        return castAndCrew;
     }
 
     /**
@@ -174,5 +178,10 @@ public class Movie implements Comparable<Movie> {
         }
 
         return this.year + (int) (this.ratings * 10) + this.title.hashCode() + this.genre.hashCode();
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

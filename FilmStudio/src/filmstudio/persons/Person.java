@@ -12,7 +12,7 @@ import java.util.Map;
  *
  * @author Eversor
  */
-public class Person implements Comparable<Person> {
+public class Person implements Comparable<Person>, Cloneable {
 
     private String gender;
     private String firstName;
@@ -234,5 +234,10 @@ public class Person implements Comparable<Person> {
         }
 
         return this.age + this.gender.hashCode() + this.firstName.hashCode() + this.surname.hashCode();
+    }
+    
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }

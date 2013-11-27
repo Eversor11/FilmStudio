@@ -4,11 +4,14 @@ import filmstudio.data.DataSearch;
 import filmstudio.data.Database;
 import filmstudio.movies.Movie;
 import filmstudio.persons.Person;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.util.List;
+import java.util.Stack;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -25,19 +28,29 @@ public class SearchUI extends javax.swing.JFrame {
 
     private DataSearch dataSearch;
     private List<Movie> movies;
+    private List<Movie> moviesInvolved;
     private List<Person> persons;
     private MovieModel movieModel;
+    private MovieModel moviesInvolvedModel;
     private PersonModel personModel;
     private MatteBorder selectionBorder;
+    private CardLayout cardLayout;
+    private Movie inspectedMovie;
+    private Person inspectedPerson;
+    private String originalLabelText;
+    private Stack navigationStack;
+    private Stack movieStack;
+    private Stack personStack;
     
     /**
      * Konstruktori, jolle annetaan parametrina Database-luokan ilmentymä, joka
      * asetetaan sen private muuttujaan. Ensin luodaan uusi ilmentymä
      * MovieModel-luokasta nullilla elokuvalistalla ja asetetaan se sen private
      * muuttujaan. Sitten luodaan uusi ilmentymä PersonModel-luokasta nullilla
-     * henkilölistalla ja asetetaan se sen private muuttujaan. Lopuksi luodaan
-     * uusi ilmentymä MatteBorder-luokasta, joka toimii taulukon valintarivin
-     * reunana ja asetetaan se sen private muuttujaan.
+     * henkilölistalla ja asetetaan se sen private muuttujaan. Tämän jälkeen
+     * luodaan uusi ilmentymä MatteBorder-luokasta, joka toimii taulukon 
+     * valintarivin reunana ja asetetaan se sen private muuttujaan. Lopuksi
+     * sijoitetaan Swing-komponentit sekä asetetaan niiden arvot oikein.
      * 
      * @param database Database-luokan ilmentymä, joka pitää sisällään tiedot
      *                 pelissä olevista henkilöistä ja elokuvista
@@ -45,10 +58,14 @@ public class SearchUI extends javax.swing.JFrame {
     public SearchUI(Database database) {
         dataSearch = new DataSearch(database);
         movieModel = new MovieModel(movies);
+        moviesInvolvedModel = new MovieModel(moviesInvolved);
         personModel = new PersonModel(persons);
         selectionBorder = new MatteBorder(1, 0, 1, 0, new Color(99, 130, 191));
+        navigationStack = new Stack();
+        movieStack = new Stack();
+        personStack = new Stack();
         
-        initComponents();
+        initComponents();      
     }
 
     /**
@@ -60,10 +77,11 @@ public class SearchUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        searchLabel = new java.awt.Label();
-        searchField = new java.awt.TextField();
-        hintLabel = new java.awt.Label();
-        searchPanel = new javax.swing.JTabbedPane();
+        searchPanel = new javax.swing.JPanel();
+        searchLabel = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
+        hintLabel = new javax.swing.JLabel();
+        searchTabbedPane = new javax.swing.JTabbedPane();
         peopleTab = new javax.swing.JPanel();
         peopleScroll = new javax.swing.JScrollPane();
         peopleTable = new javax.swing.JTable() {
@@ -92,14 +110,63 @@ public class SearchUI extends javax.swing.JFrame {
                 return c;
             }
         };
+        personPanel = new javax.swing.JPanel();
+        personLabel = new javax.swing.JLabel();
+        personBackButton = new javax.swing.JButton();
+        personInformationPanel = new javax.swing.JPanel();
+        nameLabel = new javax.swing.JLabel();
+        genderLabel = new javax.swing.JLabel();
+        ageLabel = new javax.swing.JLabel();
+        positionLabel = new javax.swing.JLabel();
+        personNameLabel = new javax.swing.JLabel();
+        personGenderLabel = new javax.swing.JLabel();
+        personAgeLabel = new javax.swing.JLabel();
+        personPositionLabel = new javax.swing.JLabel();
+        moviesInvolvedPanel = new javax.swing.JPanel();
+        moviesInvolvedScroll = new javax.swing.JScrollPane();
+        moviesInvolvedTable = new javax.swing.JTable() {
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+                JComponent jc = (JComponent) c;
+
+                if (isRowSelected(row)) {
+                    jc.setBorder(selectionBorder);
+                }
+
+                return c;
+            }
+        };
+        moviePanel = new javax.swing.JPanel();
+        movieLabel = new javax.swing.JLabel();
+        movieBackButton = new javax.swing.JButton();
+        movieInformationPanel = new javax.swing.JPanel();
+        titleLabel = new javax.swing.JLabel();
+        movieTitleLabel = new javax.swing.JLabel();
+        yearLabel = new javax.swing.JLabel();
+        movieYearLabel = new javax.swing.JLabel();
+        genreLabel = new javax.swing.JLabel();
+        movieGenreLabel = new javax.swing.JLabel();
+        ratingsLabel = new javax.swing.JLabel();
+        movieRatingsLabel = new javax.swing.JLabel();
+        movieCastAndCrewLabel = new javax.swing.JPanel();
+        directorLabel = new javax.swing.JLabel();
+        screenwriterLabel = new javax.swing.JLabel();
+        leadActorLabel = new javax.swing.JLabel();
+        supportingActorLabel = new javax.swing.JLabel();
+        movieDirectorLabel = new javax.swing.JLabel();
+        movieScreenwriterLabel = new javax.swing.JLabel();
+        movieLeadActorLabel = new javax.swing.JLabel();
+        movieSupportingActorLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FilmStudio");
         setResizable(false);
+        getContentPane().setLayout(new java.awt.CardLayout());
 
         searchLabel.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         searchLabel.setText("Search");
 
+        searchField.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         searchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchFieldActionPerformed(evt);
@@ -117,6 +184,11 @@ public class SearchUI extends javax.swing.JFrame {
         peopleTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         peopleTable.setShowHorizontalLines(false);
         peopleTable.setShowVerticalLines(false);
+        peopleTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                peopleTableMousePressed(evt);
+            }
+        });
         peopleScroll.setViewportView(peopleTable);
         DefaultTableCellRenderer centerRendererPeople = new DefaultTableCellRenderer();
         centerRendererPeople.setHorizontalAlignment(JLabel.CENTER);
@@ -134,18 +206,18 @@ public class SearchUI extends javax.swing.JFrame {
             peopleTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(peopleTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(peopleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                .addComponent(peopleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                 .addContainerGap())
         );
         peopleTabLayout.setVerticalGroup(
             peopleTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(peopleTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(peopleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addComponent(peopleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        searchPanel.addTab("People", peopleTab);
+        searchTabbedPane.addTab("People", peopleTab);
 
         movieTable.setAutoCreateRowSorter(true);
         movieTable.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
@@ -155,6 +227,11 @@ public class SearchUI extends javax.swing.JFrame {
         movieTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         movieTable.setShowHorizontalLines(false);
         movieTable.setShowVerticalLines(false);
+        movieTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                movieTableMousePressed(evt);
+            }
+        });
         movieScroll.setViewportView(movieTable);
         DefaultTableCellRenderer centerRendererMovie = new DefaultTableCellRenderer();
         centerRendererMovie.setHorizontalAlignment(JLabel.CENTER);
@@ -172,106 +249,669 @@ public class SearchUI extends javax.swing.JFrame {
             moviesTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(moviesTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(movieScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                .addComponent(movieScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                 .addContainerGap())
         );
         moviesTabLayout.setVerticalGroup(
             moviesTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(moviesTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(movieScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addComponent(movieScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        searchPanel.addTab("Movies", moviesTab);
+        searchTabbedPane.addTab("Movies", moviesTab);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchPanel)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(searchTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(searchPanelLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(hintLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(hintLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(hintLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        searchPanelLayout.setVerticalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(hintLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(searchPanel)
+                .addComponent(searchTabbedPane)
                 .addContainerGap())
         );
+
+        getContentPane().add(searchPanel, "search");
+
+        personLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        personBackButton.setText("Back");
+        personBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                personBackButtonActionPerformed(evt);
+            }
+        });
+
+        personInformationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "General Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        nameLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        nameLabel.setText("Name:");
+
+        genderLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        genderLabel.setText("Gender:");
+
+        ageLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        ageLabel.setText("Age:");
+
+        positionLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        positionLabel.setText("Position:");
+
+        personNameLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        personGenderLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        personAgeLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        personPositionLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        javax.swing.GroupLayout personInformationPanelLayout = new javax.swing.GroupLayout(personInformationPanel);
+        personInformationPanel.setLayout(personInformationPanelLayout);
+        personInformationPanelLayout.setHorizontalGroup(
+            personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(personInformationPanelLayout.createSequentialGroup()
+                .addGroup(personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(personInformationPanelLayout.createSequentialGroup()
+                        .addComponent(nameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(personNameLabel))
+                    .addGroup(personInformationPanelLayout.createSequentialGroup()
+                        .addComponent(genderLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(personGenderLabel))
+                    .addGroup(personInformationPanelLayout.createSequentialGroup()
+                        .addComponent(ageLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(personAgeLabel))
+                    .addGroup(personInformationPanelLayout.createSequentialGroup()
+                        .addComponent(positionLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(personPositionLabel)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        personInformationPanelLayout.setVerticalGroup(
+            personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(personInformationPanelLayout.createSequentialGroup()
+                .addGroup(personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameLabel)
+                    .addComponent(personNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(genderLabel)
+                    .addComponent(personGenderLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ageLabel)
+                    .addComponent(personAgeLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(personInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(positionLabel)
+                    .addComponent(personPositionLabel)))
+        );
+
+        moviesInvolvedPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Movies Involved", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        moviesInvolvedTable.setAutoCreateRowSorter(true);
+        moviesInvolvedTable.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        moviesInvolvedTable.setModel(moviesInvolvedModel);
+        moviesInvolvedTable.getColumnModel().setColumnMargin(0);
+        moviesInvolvedTable.setFillsViewportHeight(true);
+        moviesInvolvedTable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        moviesInvolvedTable.setShowHorizontalLines(false);
+        moviesInvolvedTable.setShowVerticalLines(false);
+        moviesInvolvedTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                moviesInvolvedTableMousePressed(evt);
+            }
+        });
+        moviesInvolvedScroll.setViewportView(moviesInvolvedTable);
+        DefaultTableCellRenderer centerRendererMoviesInvolved = new DefaultTableCellRenderer();
+        centerRendererMoviesInvolved.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < 4; i++) {
+            moviesInvolvedTable.getColumnModel().getColumn(i).setCellRenderer(centerRendererMoviesInvolved);
+        }
+
+        moviesInvolvedTable.getColumnModel().getColumn(1).setPreferredWidth(0);
+        moviesInvolvedTable.getColumnModel().getColumn(3).setPreferredWidth(0);
+
+        javax.swing.GroupLayout moviesInvolvedPanelLayout = new javax.swing.GroupLayout(moviesInvolvedPanel);
+        moviesInvolvedPanel.setLayout(moviesInvolvedPanelLayout);
+        moviesInvolvedPanelLayout.setHorizontalGroup(
+            moviesInvolvedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(moviesInvolvedScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+        );
+        moviesInvolvedPanelLayout.setVerticalGroup(
+            moviesInvolvedPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, moviesInvolvedPanelLayout.createSequentialGroup()
+                .addGap(0, 11, Short.MAX_VALUE)
+                .addComponent(moviesInvolvedScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        javax.swing.GroupLayout personPanelLayout = new javax.swing.GroupLayout(personPanel);
+        personPanel.setLayout(personPanelLayout);
+        personPanelLayout.setHorizontalGroup(
+            personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(personPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(personPanelLayout.createSequentialGroup()
+                        .addComponent(moviesInvolvedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(personPanelLayout.createSequentialGroup()
+                        .addComponent(personLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(personBackButton))
+                    .addComponent(personInformationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        personPanelLayout.setVerticalGroup(
+            personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(personPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(personBackButton)
+                    .addComponent(personLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(personInformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(moviesInvolvedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        getContentPane().add(personPanel, "person");
+
+        movieLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        movieBackButton.setText("Back");
+        movieBackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                movieBackButtonActionPerformed(evt);
+            }
+        });
+
+        movieInformationPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "General Information", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        titleLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        titleLabel.setText("Title:");
+
+        movieTitleLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        yearLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        yearLabel.setText("Year:");
+
+        movieYearLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        movieYearLabel.setToolTipText("");
+
+        genreLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        genreLabel.setText("Genre:");
+
+        movieGenreLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        ratingsLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        ratingsLabel.setText("Rating:");
+
+        movieRatingsLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+
+        javax.swing.GroupLayout movieInformationPanelLayout = new javax.swing.GroupLayout(movieInformationPanel);
+        movieInformationPanel.setLayout(movieInformationPanelLayout);
+        movieInformationPanelLayout.setHorizontalGroup(
+            movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(movieInformationPanelLayout.createSequentialGroup()
+                .addGroup(movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(movieInformationPanelLayout.createSequentialGroup()
+                        .addComponent(titleLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieTitleLabel))
+                    .addGroup(movieInformationPanelLayout.createSequentialGroup()
+                        .addComponent(yearLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieYearLabel))
+                    .addGroup(movieInformationPanelLayout.createSequentialGroup()
+                        .addComponent(genreLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieGenreLabel))
+                    .addGroup(movieInformationPanelLayout.createSequentialGroup()
+                        .addComponent(ratingsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieRatingsLabel)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        movieInformationPanelLayout.setVerticalGroup(
+            movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(movieInformationPanelLayout.createSequentialGroup()
+                .addGroup(movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(titleLabel)
+                    .addComponent(movieTitleLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(yearLabel)
+                    .addComponent(movieYearLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(genreLabel)
+                    .addComponent(movieGenreLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(movieInformationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ratingsLabel)
+                    .addComponent(movieRatingsLabel))
+                .addContainerGap())
+        );
+
+        movieCastAndCrewLabel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Cast And Crew", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+
+        directorLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        directorLabel.setText("Director:");
+
+        screenwriterLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        screenwriterLabel.setText("Screenwriter:");
+
+        leadActorLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        leadActorLabel.setText("Lead Actor:");
+
+        supportingActorLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        supportingActorLabel.setText("Supporting Actor:");
+
+        movieDirectorLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        movieDirectorLabel.setForeground(new java.awt.Color(0, 51, 102));
+        movieDirectorLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        movieDirectorLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movieDirectorLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movieDirectorLabelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                movieDirectorLabelMousePressed(evt);
+            }
+        });
+
+        movieScreenwriterLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        movieScreenwriterLabel.setForeground(new java.awt.Color(0, 51, 102));
+        movieScreenwriterLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        movieScreenwriterLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movieScreenwriterLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movieScreenwriterLabelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                movieScreenwriterLabelMousePressed(evt);
+            }
+        });
+
+        movieLeadActorLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        movieLeadActorLabel.setForeground(new java.awt.Color(0, 51, 102));
+        movieLeadActorLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        movieLeadActorLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movieLeadActorLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movieLeadActorLabelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                movieLeadActorLabelMousePressed(evt);
+            }
+        });
+
+        movieSupportingActorLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
+        movieSupportingActorLabel.setForeground(new java.awt.Color(0, 51, 102));
+        movieSupportingActorLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        movieSupportingActorLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                movieSupportingActorLabelMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                movieSupportingActorLabelMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                movieSupportingActorLabelMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout movieCastAndCrewLabelLayout = new javax.swing.GroupLayout(movieCastAndCrewLabel);
+        movieCastAndCrewLabel.setLayout(movieCastAndCrewLabelLayout);
+        movieCastAndCrewLabelLayout.setHorizontalGroup(
+            movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(movieCastAndCrewLabelLayout.createSequentialGroup()
+                .addGroup(movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(movieCastAndCrewLabelLayout.createSequentialGroup()
+                        .addComponent(directorLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieDirectorLabel))
+                    .addGroup(movieCastAndCrewLabelLayout.createSequentialGroup()
+                        .addComponent(screenwriterLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieScreenwriterLabel))
+                    .addGroup(movieCastAndCrewLabelLayout.createSequentialGroup()
+                        .addComponent(leadActorLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieLeadActorLabel))
+                    .addGroup(movieCastAndCrewLabelLayout.createSequentialGroup()
+                        .addComponent(supportingActorLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(movieSupportingActorLabel)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        movieCastAndCrewLabelLayout.setVerticalGroup(
+            movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(movieCastAndCrewLabelLayout.createSequentialGroup()
+                .addGroup(movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(directorLabel)
+                    .addComponent(movieDirectorLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(screenwriterLabel)
+                    .addComponent(movieScreenwriterLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(leadActorLabel)
+                    .addComponent(movieLeadActorLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(supportingActorLabel)
+                    .addComponent(movieSupportingActorLabel))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout moviePanelLayout = new javax.swing.GroupLayout(moviePanel);
+        moviePanel.setLayout(moviePanelLayout);
+        moviePanelLayout.setHorizontalGroup(
+            moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, moviePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(movieCastAndCrewLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(movieInformationPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(moviePanelLayout.createSequentialGroup()
+                        .addComponent(movieLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
+                        .addComponent(movieBackButton)))
+                .addContainerGap())
+        );
+        moviePanelLayout.setVerticalGroup(
+            moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(moviePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(movieBackButton)
+                    .addComponent(movieLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(movieInformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(movieCastAndCrewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(93, Short.MAX_VALUE))
+        );
+
+        getContentPane().add(moviePanel, "movie");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void peopleTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peopleTableMousePressed
+        if(peopleTable.rowAtPoint(evt.getPoint()) == -1){
+            personModel.fireTableDataChanged(); //purkkaviritys, koska personTable.clearSelection() jättää solun valinnan
+        }
+        
+        if(evt.getClickCount() == 2 && peopleTable.getSelectedRow() > -1){
+            inspectedPerson = (Person) peopleTable.getValueAt(peopleTable.getSelectedRow(), 0);
+            updatePersonCard(inspectedPerson);
+            navigationStack.push("search");
+            cardLayout.show(getContentPane(), "person");
+        }
+    }//GEN-LAST:event_peopleTableMousePressed
+
+    private void movieTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieTableMousePressed
+        if(movieTable.rowAtPoint(evt.getPoint()) == -1){
+            movieModel.fireTableDataChanged(); //purkkaviritys, koska movieTable.clearSelection() jättää solun valinnan
+        }
+             
+        if(evt.getClickCount() == 2 && movieTable.getSelectedRow() > -1){
+            inspectedMovie = (Movie) movieTable.getValueAt(movieTable.getSelectedRow(), 0);
+            updateMovieCard(inspectedMovie);
+            navigationStack.push("search");
+            cardLayout.show(getContentPane(), "movie");
+        }
+    }//GEN-LAST:event_movieTableMousePressed
+
+    private void movieBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieBackButtonActionPerformed
+        if(!navigationStack.isEmpty()){           
+            cardLayout.show(getContentPane(), updateBasedOnPop());
+        }
+    }//GEN-LAST:event_movieBackButtonActionPerformed
+
+    private void personBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personBackButtonActionPerformed
+        if(!navigationStack.isEmpty()){
+            cardLayout.show(getContentPane(), updateBasedOnPop());
+        }
+    }//GEN-LAST:event_personBackButtonActionPerformed
+
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        cardLayout = (CardLayout)(getContentPane().getLayout());
         persons = dataSearch.searchPersonByName(searchField.getText());
         movies = dataSearch.searchMovieByName(searchField.getText());
 
-        searchPanel.setTitleAt(0, "People (" + persons.size() + " found)");
-        searchPanel.setTitleAt(1, "Movies (" + movies.size() + " found)");
+        searchTabbedPane.setTitleAt(0, "People (" + persons.size() + " found)");
+        searchTabbedPane.setTitleAt(1, "Movies (" + movies.size() + " found)");
         
         personModel.updatePersons(persons);
         movieModel.updateMovies(movies);
     }//GEN-LAST:event_searchFieldActionPerformed
-//    Voiko poistaa vai tarvitseeko olla?
-//    
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(SearchUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(SearchUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(SearchUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(SearchUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new SearchUI().setVisible(true);
-//            }
-//        });
-//    } 
+
+    private void moviesInvolvedTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moviesInvolvedTableMousePressed
+        if(moviesInvolvedTable.rowAtPoint(evt.getPoint()) == -1){
+            moviesInvolvedModel.fireTableDataChanged(); //purkkaviritys, koska moviesInvolvedTable.clearSelection() jättää solun valinnan
+        }
+             
+        if(evt.getClickCount() == 2 && moviesInvolvedTable.getSelectedRow() > -1){
+            inspectedMovie = (Movie) moviesInvolvedTable.getValueAt(moviesInvolvedTable.getSelectedRow(), 0);
+            updateMovieCard(inspectedMovie);
+            try{
+                personStack.push((Person)inspectedPerson.clone());
+            } catch(Exception e){
+                errorPopUp(e);
+            }         
+            navigationStack.push("person");
+            cardLayout.show(getContentPane(), "movie");
+        }
+    }//GEN-LAST:event_moviesInvolvedTableMousePressed
+
+    private void movieDirectorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieDirectorLabelMousePressed
+        inspectedPerson = inspectedMovie.getCastAndCrew().get("Director");
+        updatePersonCard(inspectedPerson);
+        try{
+            movieStack.push((Movie)inspectedMovie.clone());
+        } catch(Exception e){
+            errorPopUp(e);
+        }     
+        navigationStack.push("movie");
+        cardLayout.show(getContentPane(), "person");
+    }//GEN-LAST:event_movieDirectorLabelMousePressed
+
+    private void movieDirectorLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieDirectorLabelMouseEntered
+        originalLabelText = movieDirectorLabel.getText();
+        movieDirectorLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+    }//GEN-LAST:event_movieDirectorLabelMouseEntered
+
+    private void movieDirectorLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieDirectorLabelMouseExited
+        movieDirectorLabel.setText(originalLabelText);
+    }//GEN-LAST:event_movieDirectorLabelMouseExited
+
+    private void movieScreenwriterLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieScreenwriterLabelMousePressed
+        inspectedPerson = inspectedMovie.getCastAndCrew().get("Screenwriter");
+        updatePersonCard(inspectedPerson);
+        try{
+            movieStack.push((Movie)inspectedMovie.clone());
+        } catch(Exception e){
+            errorPopUp(e);
+        } 
+        navigationStack.push("movie");
+        cardLayout.show(getContentPane(), "person");
+    }//GEN-LAST:event_movieScreenwriterLabelMousePressed
+
+    private void movieScreenwriterLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieScreenwriterLabelMouseEntered
+        originalLabelText = movieScreenwriterLabel.getText();
+        movieScreenwriterLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+    }//GEN-LAST:event_movieScreenwriterLabelMouseEntered
+
+    private void movieScreenwriterLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieScreenwriterLabelMouseExited
+        movieScreenwriterLabel.setText(originalLabelText);
+    }//GEN-LAST:event_movieScreenwriterLabelMouseExited
+
+    private void movieLeadActorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieLeadActorLabelMousePressed
+        inspectedPerson = inspectedMovie.getCastAndCrew().get("Lead Actor");
+        updatePersonCard(inspectedPerson);
+        try{
+            movieStack.push((Movie)inspectedMovie.clone());
+        } catch(Exception e){
+            errorPopUp(e);
+        } 
+        navigationStack.push("movie");
+        cardLayout.show(getContentPane(), "person");
+    }//GEN-LAST:event_movieLeadActorLabelMousePressed
+
+    private void movieLeadActorLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieLeadActorLabelMouseEntered
+        originalLabelText = movieLeadActorLabel.getText();
+        movieLeadActorLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+    }//GEN-LAST:event_movieLeadActorLabelMouseEntered
+
+    private void movieLeadActorLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieLeadActorLabelMouseExited
+        movieLeadActorLabel.setText(originalLabelText);
+    }//GEN-LAST:event_movieLeadActorLabelMouseExited
+
+    private void movieSupportingActorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMousePressed
+        inspectedPerson = inspectedMovie.getCastAndCrew().get("Supporting Actor");
+        updatePersonCard(inspectedPerson);
+        try{
+            movieStack.push((Movie)inspectedMovie.clone());
+        } catch(Exception e){
+            errorPopUp(e);
+        } 
+        navigationStack.push("movie");
+        cardLayout.show(getContentPane(), "person");
+    }//GEN-LAST:event_movieSupportingActorLabelMousePressed
+
+    private void movieSupportingActorLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMouseEntered
+        originalLabelText = movieSupportingActorLabel.getText();
+        movieSupportingActorLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+    }//GEN-LAST:event_movieSupportingActorLabelMouseEntered
+
+    private void movieSupportingActorLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMouseExited
+        movieSupportingActorLabel.setText(originalLabelText);
+    }//GEN-LAST:event_movieSupportingActorLabelMouseExited
+
+    private void updatePersonCard(Person person){
+        personLabel.setText(person.getFirstName()+" "+person.getSurname()+", "+person.getPosition());
+        personNameLabel.setText(person.getFirstName()+" "+person.getSurname());
+        personGenderLabel.setText(person.getGender());
+        personAgeLabel.setText(""+person.getAge());
+        personPositionLabel.setText(person.getPosition());
+        moviesInvolvedModel.updateMovies(person.getMovies());
+    }
+    
+    private void updateMovieCard(Movie movie){       
+        movieLabel.setText(movie.getTitle()+" ("+movie.getYear()+")");
+        movieTitleLabel.setText(movie.getTitle());
+        movieYearLabel.setText(""+movie.getYear());
+        movieGenreLabel.setText(movie.getGenre());
+        movieRatingsLabel.setText(""+movie.getRatings()+" / 10");
+        movieDirectorLabel.setText(movie.getCastAndCrew().get("Director").toString());
+        movieScreenwriterLabel.setText(movie.getCastAndCrew().get("Screenwriter").toString());
+        movieLeadActorLabel.setText(movie.getCastAndCrew().get("Lead Actor").toString());
+        movieSupportingActorLabel.setText(movie.getCastAndCrew().get("Supporting Actor").toString());
+    }
+    
+    private String updateBasedOnPop(){
+        String pop = (String)navigationStack.pop();
+        if(pop.equals("person")){
+            if(!personStack.isEmpty()){
+                updatePersonCard((Person)personStack.pop());
+            }           
+        } else if(pop.equals("movie")){
+            if(!movieStack.isEmpty()){
+                updateMovieCard((Movie)movieStack.pop());
+            }           
+        }
+        return pop;
+    }
+    
+    private void errorPopUp(Exception e){
+        JOptionPane.showMessageDialog(this, "An error has occurred:\n"
+                    +e.getMessage()+"\n\nRestart the program for safe usage as "
+                    + "some features may not work.", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private java.awt.Label hintLabel;
+    private javax.swing.JLabel ageLabel;
+    private javax.swing.JLabel directorLabel;
+    private javax.swing.JLabel genderLabel;
+    private javax.swing.JLabel genreLabel;
+    private javax.swing.JLabel hintLabel;
+    private javax.swing.JLabel leadActorLabel;
+    private javax.swing.JButton movieBackButton;
+    private javax.swing.JPanel movieCastAndCrewLabel;
+    private javax.swing.JLabel movieDirectorLabel;
+    private javax.swing.JLabel movieGenreLabel;
+    private javax.swing.JPanel movieInformationPanel;
+    private javax.swing.JLabel movieLabel;
+    private javax.swing.JLabel movieLeadActorLabel;
+    private javax.swing.JPanel moviePanel;
+    private javax.swing.JLabel movieRatingsLabel;
+    private javax.swing.JLabel movieScreenwriterLabel;
     private javax.swing.JScrollPane movieScroll;
+    private javax.swing.JLabel movieSupportingActorLabel;
     private javax.swing.JTable movieTable;
+    private javax.swing.JLabel movieTitleLabel;
+    private javax.swing.JLabel movieYearLabel;
+    private javax.swing.JPanel moviesInvolvedPanel;
+    private javax.swing.JScrollPane moviesInvolvedScroll;
+    private javax.swing.JTable moviesInvolvedTable;
     private javax.swing.JPanel moviesTab;
+    private javax.swing.JLabel nameLabel;
     private javax.swing.JScrollPane peopleScroll;
     private javax.swing.JPanel peopleTab;
     private javax.swing.JTable peopleTable;
-    private java.awt.TextField searchField;
-    private java.awt.Label searchLabel;
-    private javax.swing.JTabbedPane searchPanel;
+    private javax.swing.JLabel personAgeLabel;
+    private javax.swing.JButton personBackButton;
+    private javax.swing.JLabel personGenderLabel;
+    private javax.swing.JPanel personInformationPanel;
+    private javax.swing.JLabel personLabel;
+    private javax.swing.JLabel personNameLabel;
+    private javax.swing.JPanel personPanel;
+    private javax.swing.JLabel personPositionLabel;
+    private javax.swing.JLabel positionLabel;
+    private javax.swing.JLabel ratingsLabel;
+    private javax.swing.JLabel screenwriterLabel;
+    private javax.swing.JTextField searchField;
+    private javax.swing.JLabel searchLabel;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JTabbedPane searchTabbedPane;
+    private javax.swing.JLabel supportingActorLabel;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel yearLabel;
     // End of variables declaration//GEN-END:variables
 }

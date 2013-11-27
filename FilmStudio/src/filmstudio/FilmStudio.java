@@ -8,6 +8,7 @@ import filmstudio.movies.MovieMaker;
 import filmstudio.persons.PersonCreator;
 import filmstudio.utilities.FileReader;
 import java.util.Random;
+import javax.swing.JOptionPane;
 
 /**
  * FilmStudio-luokka, joka luo peliin tarvittavat ilmentymät luokista ja
@@ -27,17 +28,22 @@ public class FilmStudio {
         PersonCreator personCreator;
         HistoryGenerator historyGenerator;
         
+        SearchUI searchUI = new SearchUI(database);
+        searchUI.setLocationRelativeTo(null);
+        searchUI.setVisible(true);
+        
         try{
             movieMaker = new MovieMaker(fileReader, random);
             personCreator = new PersonCreator(fileReader, random);
             historyGenerator = new HistoryGenerator(database, movieMaker, personCreator, fileReader);
             historyGenerator.generateHistory(10);
         } catch(Exception e){
-            System.out.println("Error: " + e.getMessage());
+            JOptionPane.showMessageDialog(searchUI, "An error has occurred:\n"
+                    +e.getMessage()+"\n\nRestart the program for safe usage as "
+                    + "some features may not work.", "Error", JOptionPane.ERROR_MESSAGE);
+            System.out.println("Error: "+e.getMessage()); // testejä varten
         }
         
-        SearchUI searchUI = new SearchUI(database);
-        searchUI.setLocationRelativeTo(null);
-        searchUI.setVisible(true);
+        
     }
 }
