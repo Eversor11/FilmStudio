@@ -17,6 +17,12 @@ public class Movie implements Comparable<Movie>, Cloneable {
     private int year;
     private String genre;
     private double ratings;
+    
+    /**
+     * Mappi, joka pitää sisällään elokuvan toiminimet, sekä niillä
+     * työskennelleet henkilöt.
+     * 
+     */
     private Map<String, Person> castAndCrew;
 
     /**

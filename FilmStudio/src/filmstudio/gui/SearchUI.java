@@ -7,7 +7,10 @@ import filmstudio.persons.Person;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.font.TextAttribute;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -18,7 +21,8 @@ import javax.swing.table.TableCellRenderer;
 
 /**
  * SearchUI-luokka, joka perii JFrame-luokan ja määrittää sen, mitä
- * merkkijonohakuun perustuva käyttöliittymä pitää sisällään.
+ * merkkijonohakuun ja tiedon tarkempaan selaamiseen perustuva käyttöliittymä
+ * pitää sisällään.
  * 
  * Luokan pohja luotu Netbeansin GUI-builderilla.
  *
@@ -34,13 +38,34 @@ public class SearchUI extends javax.swing.JFrame {
     private MovieModel moviesInvolvedModel;
     private PersonModel personModel;
     private MatteBorder selectionBorder;
+    
+    /**
+     * Käyttöliittymän sivujen selaamisen ydin. Käytetyt kortit ovat "search",
+     * "person", "movie".
+     * 
+     */
     private CardLayout cardLayout;
     private Movie inspectedMovie;
     private Person inspectedPerson;
-    private String originalLabelText;
+    
+    /**
+     * Navigaatiostack, joka pitää järjestyksessä sisällään tarkastellut sivut 
+     * 
+     */
     private Stack navigationStack;
+    
+    /**
+     * Elokuvastack, joka pitää järjestyksessä sisällään tarkastellut elokuvat
+     * 
+     */
     private Stack movieStack;
+    
+    /**
+     * Henkilöstack, joka pitää järjestyksessä sisällään tarkastellut henkilöt 
+     * 
+     */
     private Stack personStack;
+    private Font originalFont;
     
     /**
      * Konstruktori, jolle annetaan parametrina Database-luokan ilmentymä, joka
@@ -49,8 +74,10 @@ public class SearchUI extends javax.swing.JFrame {
      * muuttujaan. Sitten luodaan uusi ilmentymä PersonModel-luokasta nullilla
      * henkilölistalla ja asetetaan se sen private muuttujaan. Tämän jälkeen
      * luodaan uusi ilmentymä MatteBorder-luokasta, joka toimii taulukon 
-     * valintarivin reunana ja asetetaan se sen private muuttujaan. Lopuksi
-     * sijoitetaan Swing-komponentit sekä asetetaan niiden arvot oikein.
+     * valintarivin reunana ja asetetaan se sen private muuttujaan. Sitten
+     * luodaan kolme uutta Stack-luokan ilmentymää niiden private muuttujiin.
+     * Lopuksi sijoitetaan Swing-komponentit sekä asetetaan niiden arvot oikein
+     * ja tallennetaan CardLayout sen private muuttujaan.
      * 
      * @param database Database-luokan ilmentymä, joka pitää sisällään tiedot
      *                 pelissä olevista henkilöistä ja elokuvista
@@ -65,7 +92,8 @@ public class SearchUI extends javax.swing.JFrame {
         movieStack = new Stack();
         personStack = new Stack();
         
-        initComponents();      
+        initComponents();
+        cardLayout = (CardLayout)(getContentPane().getLayout());
     }
 
     /**
@@ -112,6 +140,7 @@ public class SearchUI extends javax.swing.JFrame {
         };
         personPanel = new javax.swing.JPanel();
         personLabel = new javax.swing.JLabel();
+        personHomeButton = new javax.swing.JButton();
         personBackButton = new javax.swing.JButton();
         personInformationPanel = new javax.swing.JPanel();
         nameLabel = new javax.swing.JLabel();
@@ -138,6 +167,7 @@ public class SearchUI extends javax.swing.JFrame {
         };
         moviePanel = new javax.swing.JPanel();
         movieLabel = new javax.swing.JLabel();
+        movieHomeButton = new javax.swing.JButton();
         movieBackButton = new javax.swing.JButton();
         movieInformationPanel = new javax.swing.JPanel();
         titleLabel = new javax.swing.JLabel();
@@ -213,7 +243,7 @@ public class SearchUI extends javax.swing.JFrame {
             peopleTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(peopleTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(peopleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                .addComponent(peopleScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -256,7 +286,7 @@ public class SearchUI extends javax.swing.JFrame {
             moviesTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(moviesTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(movieScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
+                .addComponent(movieScroll, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -297,7 +327,16 @@ public class SearchUI extends javax.swing.JFrame {
 
         personLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
+        personHomeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/gui/home.png"))); // NOI18N
+        personHomeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        personHomeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                personHomeButtonActionPerformed(evt);
+            }
+        });
+
         personBackButton.setText("Back");
+        personBackButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         personBackButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 personBackButtonActionPerformed(evt);
@@ -416,26 +455,30 @@ public class SearchUI extends javax.swing.JFrame {
             .addGroup(personPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(personInformationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(personPanelLayout.createSequentialGroup()
-                        .addComponent(moviesInvolvedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(personPanelLayout.createSequentialGroup()
-                        .addComponent(personLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(personBackButton))
-                    .addComponent(personInformationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(personPanelLayout.createSequentialGroup()
+                                .addComponent(personHomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(personBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(moviesInvolvedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(personLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         personPanelLayout.setVerticalGroup(
             personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(personPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(personBackButton)
-                    .addComponent(personLabel))
+                .addGroup(personPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(personBackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(personHomeButton, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(personLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(personInformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(moviesInvolvedPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -444,7 +487,16 @@ public class SearchUI extends javax.swing.JFrame {
 
         movieLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
+        movieHomeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/gui/home.png"))); // NOI18N
+        movieHomeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        movieHomeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                movieHomeButtonActionPerformed(evt);
+            }
+        });
+
         movieBackButton.setText("Back");
+        movieBackButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         movieBackButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 movieBackButtonActionPerformed(evt);
@@ -615,7 +667,7 @@ public class SearchUI extends javax.swing.JFrame {
                         .addComponent(supportingActorLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(movieSupportingActorLabel)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 293, Short.MAX_VALUE))
         );
         movieCastAndCrewLabelLayout.setVerticalGroup(
             movieCastAndCrewLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -642,29 +694,32 @@ public class SearchUI extends javax.swing.JFrame {
         moviePanel.setLayout(moviePanelLayout);
         moviePanelLayout.setHorizontalGroup(
             moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, moviePanelLayout.createSequentialGroup()
+            .addGroup(moviePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(movieCastAndCrewLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(movieInformationPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(movieCastAndCrewLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(moviePanelLayout.createSequentialGroup()
-                        .addComponent(movieLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 355, Short.MAX_VALUE)
-                        .addComponent(movieBackButton)))
+                        .addComponent(movieHomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(movieBackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(movieInformationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(movieLabel))
                 .addContainerGap())
         );
         moviePanelLayout.setVerticalGroup(
             moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(moviePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(movieBackButton)
-                    .addComponent(movieLabel))
+                .addGroup(moviePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(movieHomeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(movieBackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(movieInformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(movieCastAndCrewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(93, Short.MAX_VALUE))
+                .addComponent(movieLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(movieInformationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(movieCastAndCrewLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         getContentPane().add(moviePanel, "movie");
@@ -672,6 +727,15 @@ public class SearchUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodi, joka reagoi, kun hakuikkunan henkilötaulukkoa klikataan hiirellä.
+     * Jos klikataan tyhjää riviä, poistaa metodin valinnan aikasemmalta 
+     * riviltä. Jos painaa kaksi kertaa epätyhjää riviä, niin päivittää 
+     * henkilökortin tiedot kyseisen rivin tiedoilla, pushaa stackiin 
+     * nykyisen sijainnin ja lopuksi näyttää henkilökortin.  
+     * 
+     * @param evt Hiiren toiminta
+     */
     private void peopleTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peopleTableMousePressed
         if(peopleTable.rowAtPoint(evt.getPoint()) == -1){
             personModel.fireTableDataChanged(); //purkkaviritys, koska personTable.clearSelection() jättää solun valinnan
@@ -685,6 +749,15 @@ public class SearchUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_peopleTableMousePressed
 
+    /**
+     * Metodi, joka reagoi, kun hakuikkunan elokuvataulukkoa klikataan hiirellä.
+     * Jos klikataan tyhjää riviä, poistaa metodin valinnan aikasemmalta 
+     * riviltä. Jos painaa kaksi kertaa epätyhjää riviä, niin päivittää 
+     * elokuvakortin tiedot kyseisen rivin tiedoilla, pushaa stackiin 
+     * nykyisen sijainnin ja lopuksi näyttää elokuvakortin. 
+     * 
+     * @param evt Hiiren toiminta
+     */
     private void movieTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieTableMousePressed
         if(movieTable.rowAtPoint(evt.getPoint()) == -1){
             movieModel.fireTableDataChanged(); //purkkaviritys, koska movieTable.clearSelection() jättää solun valinnan
@@ -704,14 +777,13 @@ public class SearchUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_movieBackButtonActionPerformed
 
-    private void personBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personBackButtonActionPerformed
-        if(!navigationStack.isEmpty()){
-            cardLayout.show(getContentPane(), updateBasedOnPop());
-        }
-    }//GEN-LAST:event_personBackButtonActionPerformed
-
+    /**
+     * Metodi, joka reagoi, kun hakukenttää painetaan enterillä. Päivittää
+     * henkilö- ja elokuvatabien tiedot löydetyillä olioilla.
+     * 
+     * @param evt Hakukentän toiminto
+     */
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
-        cardLayout = (CardLayout)(getContentPane().getLayout());
         persons = dataSearch.searchPersonByName(searchField.getText());
         movies = dataSearch.searchMovieByName(searchField.getText());
 
@@ -722,107 +794,112 @@ public class SearchUI extends javax.swing.JFrame {
         movieModel.updateMovies(movies);
     }//GEN-LAST:event_searchFieldActionPerformed
 
-    private void moviesInvolvedTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moviesInvolvedTableMousePressed
-        if(moviesInvolvedTable.rowAtPoint(evt.getPoint()) == -1){
-            moviesInvolvedModel.fireTableDataChanged(); //purkkaviritys, koska moviesInvolvedTable.clearSelection() jättää solun valinnan
-        }
-             
-        if(evt.getClickCount() == 2 && moviesInvolvedTable.getSelectedRow() > -1){
-            inspectedMovie = (Movie) moviesInvolvedTable.getValueAt(moviesInvolvedTable.getSelectedRow(), 0);
-            updateMovieCard(inspectedMovie);
-            try{
-                personStack.push((Person)inspectedPerson.clone());
-            } catch(Exception e){
-                errorPopUp(e);
-            }         
-            navigationStack.push("person");
-            cardLayout.show(getContentPane(), "movie");
-        }
-    }//GEN-LAST:event_moviesInvolvedTableMousePressed
-
     private void movieDirectorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieDirectorLabelMousePressed
         inspectedPerson = inspectedMovie.getCastAndCrew().get("Director");
         updatePersonCard(inspectedPerson);
-        try{
-            movieStack.push((Movie)inspectedMovie.clone());
-        } catch(Exception e){
-            errorPopUp(e);
-        }     
+        pushInspectedMovie();   
         navigationStack.push("movie");
         cardLayout.show(getContentPane(), "person");
     }//GEN-LAST:event_movieDirectorLabelMousePressed
 
     private void movieDirectorLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieDirectorLabelMouseEntered
-        originalLabelText = movieDirectorLabel.getText();
-        movieDirectorLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+        originalFont = movieDirectorLabel.getFont();     
+        movieDirectorLabel.setFont(underlinedFont());
     }//GEN-LAST:event_movieDirectorLabelMouseEntered
 
     private void movieDirectorLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieDirectorLabelMouseExited
-        movieDirectorLabel.setText(originalLabelText);
+        movieDirectorLabel.setFont(originalFont);
     }//GEN-LAST:event_movieDirectorLabelMouseExited
 
     private void movieScreenwriterLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieScreenwriterLabelMousePressed
         inspectedPerson = inspectedMovie.getCastAndCrew().get("Screenwriter");
         updatePersonCard(inspectedPerson);
-        try{
-            movieStack.push((Movie)inspectedMovie.clone());
-        } catch(Exception e){
-            errorPopUp(e);
-        } 
+        pushInspectedMovie();
         navigationStack.push("movie");
         cardLayout.show(getContentPane(), "person");
     }//GEN-LAST:event_movieScreenwriterLabelMousePressed
 
     private void movieScreenwriterLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieScreenwriterLabelMouseEntered
-        originalLabelText = movieScreenwriterLabel.getText();
-        movieScreenwriterLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+        originalFont = movieScreenwriterLabel.getFont();
+        movieScreenwriterLabel.setFont(underlinedFont());
     }//GEN-LAST:event_movieScreenwriterLabelMouseEntered
 
     private void movieScreenwriterLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieScreenwriterLabelMouseExited
-        movieScreenwriterLabel.setText(originalLabelText);
+        movieScreenwriterLabel.setFont(originalFont);
     }//GEN-LAST:event_movieScreenwriterLabelMouseExited
 
     private void movieLeadActorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieLeadActorLabelMousePressed
         inspectedPerson = inspectedMovie.getCastAndCrew().get("Lead Actor");
         updatePersonCard(inspectedPerson);
-        try{
-            movieStack.push((Movie)inspectedMovie.clone());
-        } catch(Exception e){
-            errorPopUp(e);
-        } 
+        pushInspectedMovie();
         navigationStack.push("movie");
         cardLayout.show(getContentPane(), "person");
     }//GEN-LAST:event_movieLeadActorLabelMousePressed
 
     private void movieLeadActorLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieLeadActorLabelMouseEntered
-        originalLabelText = movieLeadActorLabel.getText();
-        movieLeadActorLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+        originalFont = movieLeadActorLabel.getFont();
+        movieLeadActorLabel.setFont(underlinedFont());
     }//GEN-LAST:event_movieLeadActorLabelMouseEntered
 
     private void movieLeadActorLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieLeadActorLabelMouseExited
-        movieLeadActorLabel.setText(originalLabelText);
+        movieLeadActorLabel.setFont(originalFont);
     }//GEN-LAST:event_movieLeadActorLabelMouseExited
 
     private void movieSupportingActorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMousePressed
         inspectedPerson = inspectedMovie.getCastAndCrew().get("Supporting Actor");
         updatePersonCard(inspectedPerson);
-        try{
-            movieStack.push((Movie)inspectedMovie.clone());
-        } catch(Exception e){
-            errorPopUp(e);
-        } 
+        pushInspectedMovie();
         navigationStack.push("movie");
         cardLayout.show(getContentPane(), "person");
     }//GEN-LAST:event_movieSupportingActorLabelMousePressed
 
     private void movieSupportingActorLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMouseEntered
-        originalLabelText = movieSupportingActorLabel.getText();
-        movieSupportingActorLabel.setText("<HTML><U>"+originalLabelText+"</U></HTML>");
+        originalFont = movieSupportingActorLabel.getFont();
+        movieSupportingActorLabel.setFont(underlinedFont());
     }//GEN-LAST:event_movieSupportingActorLabelMouseEntered
 
     private void movieSupportingActorLabelMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMouseExited
-        movieSupportingActorLabel.setText(originalLabelText);
+        movieSupportingActorLabel.setFont(originalFont);
     }//GEN-LAST:event_movieSupportingActorLabelMouseExited
+
+    /**
+     * Metodi, joka reagoi, kun henkilötietojen Movies Involved-taulukkoa
+     * klikataan hiirellä. Jos klikataan tyhjää riviä, poistaa metodin valinnan
+     * aikasemmalta riviltä. Jos painaa kaksi kertaa epätyhjää riviä, niin
+     * päivittää elokuvakortin tiedot rivin tiedoilla, pushaa stackeihin 
+     * nykyiset tiedot ja lopuksi näyttää elokuvakortin.
+     * 
+     * @param evt Hiiren toiminta
+     */
+    private void moviesInvolvedTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moviesInvolvedTableMousePressed
+        if(moviesInvolvedTable.rowAtPoint(evt.getPoint()) == -1){
+            moviesInvolvedModel.fireTableDataChanged(); //purkkaviritys, koska moviesInvolvedTable.clearSelection() jättää solun valinnan
+        }
+
+        if(evt.getClickCount() == 2 && moviesInvolvedTable.getSelectedRow() > -1){
+            inspectedMovie = (Movie) moviesInvolvedTable.getValueAt(moviesInvolvedTable.getSelectedRow(), 0);
+            updateMovieCard(inspectedMovie);
+            pushInspectedPerson();
+            navigationStack.push("person");
+            cardLayout.show(getContentPane(), "movie");
+        }
+    }//GEN-LAST:event_moviesInvolvedTableMousePressed
+
+    private void personBackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personBackButtonActionPerformed
+        if(!navigationStack.isEmpty()){
+            cardLayout.show(getContentPane(), updateBasedOnPop());
+        }
+    }//GEN-LAST:event_personBackButtonActionPerformed
+
+    private void personHomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_personHomeButtonActionPerformed
+        clearStacks();
+        cardLayout.show(getContentPane(), "search");
+    }//GEN-LAST:event_personHomeButtonActionPerformed
+
+    private void movieHomeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_movieHomeButtonActionPerformed
+        clearStacks();
+        cardLayout.show(getContentPane(), "search");
+    }//GEN-LAST:event_movieHomeButtonActionPerformed
 
     private void updatePersonCard(Person person){
         personLabel.setText(person.getFirstName()+" "+person.getSurname()+", "+person.getPosition());
@@ -845,6 +922,12 @@ public class SearchUI extends javax.swing.JFrame {
         movieSupportingActorLabel.setText(movie.getCastAndCrew().get("Supporting Actor").toString());
     }
     
+    /**
+     * Metodi, joka päivittää korttien tiedot navigaatiopopeista riippuen.
+     * Palauttaa lopuksi tiedon siitä, mikä kortti näytetään seuraavaksi.
+     * 
+     * @return Palauttaa seuraavaksi näytettävän kortin
+     */
     private String updateBasedOnPop(){
         String pop = (String)navigationStack.pop();
         if(pop.equals("person")){
@@ -857,6 +940,34 @@ public class SearchUI extends javax.swing.JFrame {
             }           
         }
         return pop;
+    }
+    
+    private void pushInspectedPerson(){
+        try{
+            personStack.push((Person)inspectedPerson.clone());
+        } catch(Exception e){
+            errorPopUp(e);
+        }  
+    }
+    
+    private void pushInspectedMovie(){
+        try{
+            movieStack.push((Movie)inspectedMovie.clone());
+        } catch(Exception e){
+            errorPopUp(e);
+        } 
+    }
+    
+    private void clearStacks(){
+        navigationStack.clear();
+        personStack.clear();
+        movieStack.clear();
+    }
+    
+    private Font underlinedFont(){
+        Map attributes = originalFont.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        return originalFont.deriveFont(attributes);
     }
     
     private void errorPopUp(Exception e){
@@ -876,6 +987,7 @@ public class SearchUI extends javax.swing.JFrame {
     private javax.swing.JPanel movieCastAndCrewLabel;
     private javax.swing.JLabel movieDirectorLabel;
     private javax.swing.JLabel movieGenreLabel;
+    private javax.swing.JButton movieHomeButton;
     private javax.swing.JPanel movieInformationPanel;
     private javax.swing.JLabel movieLabel;
     private javax.swing.JLabel movieLeadActorLabel;
@@ -898,6 +1010,7 @@ public class SearchUI extends javax.swing.JFrame {
     private javax.swing.JLabel personAgeLabel;
     private javax.swing.JButton personBackButton;
     private javax.swing.JLabel personGenderLabel;
+    private javax.swing.JButton personHomeButton;
     private javax.swing.JPanel personInformationPanel;
     private javax.swing.JLabel personLabel;
     private javax.swing.JLabel personNameLabel;

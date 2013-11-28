@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  * FilmStudio-luokka, joka luo peliin tarvittavat ilmentymät luokista ja
- * käyttöliittymän
+ * käyttöliittymän sekä generoi elokuvahistorian.
  *
  * @author Eversor
  */

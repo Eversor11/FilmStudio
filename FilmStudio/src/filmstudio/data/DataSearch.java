@@ -61,6 +61,17 @@ public class DataSearch {
         return searchedAndSortedPersonList(name.trim().toLowerCase());
     }
 
+    /**
+     * Metodi, joka kutsuttaessa palauttaa listan elokuvista, jotka ovat
+     * löydetty parametrina annetulla merkkijonolla. For-loopissa käydään
+     * databasen elokuvat läpi, ja jos pienaakkosiksi muutettu elokuvan nimi
+     * sisältää merkkijonon, niin kyseinen elokuva lisätään palautettavaan
+     * listaan. Loopin jälkeen lista sortataan nimen mukaisesti. Lopuksi 
+     * palautetaan lista elokuvista, jotka on löydetty.
+     * 
+     * @param name Merkkijono jolla etsitään
+     * @return Palauttaa listan elokuvista, jotka on löydetty
+     */
     private List<Movie> searchedAndSortedMovieList(String name) {
         List<Movie> found = new ArrayList<Movie>();
 
@@ -74,6 +85,17 @@ public class DataSearch {
         return found;
     }
 
+    /**
+     * Metodi, joka kutsuttaessa palauttaa listan henkilöistä, jotka ovat
+     * löydetty parametrina annetulla merkkijonolla. For-loopissa käydään
+     * databasen henkilöt läpi, ja jos pienaakkosiksi muutettu henkilön koko
+     * nimi sisältää merkkijonon, niin kyseinen henkilö lisätään palautettavaan
+     * listaan. Loopin jälkeen lista sortataan nimen mukaisesti. Lopuksi 
+     * palautetaan lista henkilöistä, jotka on löydetty.
+     * 
+     * @param name Merkkijono jolla etsitään
+     * @return Palauttaa listan henkilöistä, jotka on löydetty
+     */
     private List<Person> searchedAndSortedPersonList(String name) {
         List<Person> found = new ArrayList<Person>();
 

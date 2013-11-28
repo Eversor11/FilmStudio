@@ -19,6 +19,12 @@ public class HistoryGenerator {
     private Database database;
     private MovieMaker movieMaker;
     private PersonCreator personCreator;
+    
+    /**
+     * Lista merkkijonoja, jonne luetaan tiedostosta kaikki mahdolliset
+     * elokuvien toiminimet.
+     * 
+     */
     private List<String> castAndCrewPositions;
 
     /**
@@ -71,6 +77,20 @@ public class HistoryGenerator {
         }
     }
 
+    /**
+     * Metodi, jolla luodaan parametrina annettuun elokuvaan parametrina
+     * annettu määrä toimihenkilöitä. For-loopin alussa generoidaan uusi
+     * henkilö, jolle annetaan parametrina nykyisen vuoden ja elokuvan
+     * julkaisuvuoden erotus. Tämän jälkeen listaan lisätään luotu henkilö ja
+     * samalla lisätään hänet myös databaseen. Lopuksi palautetaan lista
+     * elokuvaan luoduista toimihenkilöistä.
+     * 
+     * @param movie Elokuva, johon luodaan toimihenkilöitä
+     * @param positionCount Toiminimien lukumäärä
+     * @return Palauttaa listan elokuvaan luotuja toimihenkilöitä
+     * @throws Exception Mahdollinen poikkeus, joka heitetään henkilöiden 
+     *                   luomisen yhteydessä
+     */
     private List<Person> createCastAndCrew(Movie movie, int positionCount) throws Exception {
         List<Person> castAndCrew = new ArrayList<Person>();
         for (int i = 0; i < positionCount; i++) {

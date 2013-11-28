@@ -1,0 +1,5 @@
+Hakuikkunassa hae sanahaulla henkilöitä ja elokuvia. Jätä tyhjäksi, jos haluat nähdä kaiken.
+Taulukon rivejä tuplaklikkaamalla pääset näkemään tarkempia tietoja henkilöistä ja elokuvista.
+Home-napilla pääse takaisin hakuikkunaan ja back-napilla pääset takaisin edelliseen ruutuun.
+
+Toimivuus testattu Windows 7:lla.

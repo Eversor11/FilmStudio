@@ -65,6 +65,12 @@ public class PersonCreator {
         return new Person(gender, firstName, surname, age);
     }
 
+    /**
+     * Metodi, joka generoi henkilölle sukupuolen. Todennäköisyydet sukupuolelle
+     * ovat yhtäsuuret. Palauttaa lopuksi generoidun sukupuolen.
+     * 
+     * @return Palauttaa generoidun sukupuolen
+     */
     private String gender() {
         if (random.nextInt(2) > 0) {
             return "Male";
@@ -73,6 +79,18 @@ public class PersonCreator {
         }
     }
 
+    /**
+     * Metodi, joka parametrina annetun sukupuolen perusteella generoi
+     * henkilölle etunimen. Aluksi tarkastaa kumpaa sukupuolta on ja tämän
+     * jälkeen nameGeneratorin generateName-metodia kutsutaan parametreilla,
+     * jotka ovat lista sukupuoleen pohjautuvista nimistä sekä nimilistan
+     * esiintymistiheyksien kvartiilit. Lopuksi palauttaa generoidun etunimen.
+     * 
+     * @param gender Henkilön sukupuoli
+     * @return Palauttaa henkilön etunimen
+     * @throws Exception Mahdollinen poikkeus joka heitetään, jos tiedoston
+     *                   luku epäonnistuu etunimen generoimisessa
+     */
     private String firstName(String gender) throws Exception {
 
         if (gender.equals("Male")) {
@@ -82,10 +100,27 @@ public class PersonCreator {
         }
     }
 
+    /**
+     * Metodi, joka generoi henkilölle sukunimen. Aluksi kutsuu nameGeneratorin 
+     * generateName-metodia parametreilla, jotka ovat lista sukunimistä sekä 
+     * sukunimilistan esiintymistiheyksien kvartiilit. Lopuksi palauttaa 
+     * generoidun sukunimen.
+     * 
+     * @return Palauttaa henkilön sukunimen
+     * @throws Exception Mahdollinen poikkeus joka heitetään, jos tiedoston
+     *                   luku epäonnistuu sukunimen generoimisessa
+     */
     private String surname() throws Exception {
         return nameGenerator.generateName(surnames, 197, 1712, 14585);
     }
 
+    /**
+     * Metodi, joka generoi henkilön iän. Arpoo luvun 0:n ja 48:n väliltä ja
+     * lisää tähän 12. Ikähaarukka on siis 12-60. Palauttaa lopuksi generoidun
+     * iän.
+     * 
+     * @return Palauttaa henkilön iän
+     */
     private int age() {
         return random.nextInt(49) + 12;
     }

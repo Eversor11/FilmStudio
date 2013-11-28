@@ -73,19 +73,48 @@ public class MovieMaker {
         return new Movie(title, year, genre, ratings);
     }
 
+    /**
+     * Metodi, joka parametrina annetun genren perusteella generoi elokuvalle
+     * nimen. Palauttaa parametrina annettavien genrepohjaisten tiedostopolkujen 
+     * perusteella titleGeneratorin luoman nimen elokuvalle.
+     * 
+     * @param genre Elokuvan genre
+     * @return Palauttaa generoidun nimen elokuvalle
+     * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
+     *                   epäonnistuttua
+     */
     private String generateTitle(String genre) throws Exception {
         return titleGenerator.generateTitle("src/resources/movies/" + genre + "_adjectives.txt",
                 "src/resources/movies/" + genre + "_nouns.txt");
     }
 
+    /**
+     * Metodi, joka generoi elokuvan julkaisuvuoden. Palauttaa nykyisen vuoden
+     * ja randomilla arvotun luvun (0-63 vuodella 2013) erotuksen.
+     * 
+     * @return Palauttaa elokuvan julkaisuvuoden
+     */
     private int year() {
         return this.currentYear - random.nextInt(this.currentYear - 1949);
     }
 
+    /**
+     * Metodi, joka generoi elokuvan genren. Palauttaa genre-listalta
+     * arvotun genren.
+     * 
+     * @return Palauttaa elokuvan genren
+     */
     private String genre() {
         return genres.get(random.nextInt(genres.size()));
     }
 
+    /**
+     * Metodi, joka generoi elokuvan arvosanojen keskiarvon. Heittää kahta
+     * noppaa, toisen kokonaisluvulle 0:n ja 10:n väliltä ja toisen desimaalille
+     * 0:n ja 9:n väliltä. Maksimiarvo 10 ja minimi 0.1
+     * 
+     * @return Palauttaa elokuvan arvosanojen keskiarvon
+     */
     private double ratings() {
 
         double value = 0;

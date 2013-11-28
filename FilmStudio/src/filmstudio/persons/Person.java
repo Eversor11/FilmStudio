@@ -18,7 +18,19 @@ public class Person implements Comparable<Person>, Cloneable {
     private String firstName;
     private String surname;
     private int age;
+    
+    /**
+     * Mappi, joka pitää sisällään henkilön käyttämät toiminimet sekä niihin
+     * liittyvän nimekkyyden.
+     * 
+     */
     private Map<String, Integer> positions;
+    
+    /**
+     * Mappi, joka pitää sisällään elokuvat joissa henkilö on toiminut sekä
+     * toiminimen millä työskennellyt elokuvaa tehdessään.
+     * 
+     */
     private Map<Movie, String> movies;
 
     /**
@@ -81,6 +93,13 @@ public class Person implements Comparable<Person>, Cloneable {
         return positionWithMostFame();    
     }
     
+    /**
+     * Metodi, joka palauttaa toiminimen, jolla on korkein nimekkyys. Selaa
+     * toiminimet läpi ja vertailee nimekkyyden suuruutta. Lopuksi palauttaa
+     * toiminimen, jolla on korkein nimekkyys.
+     * 
+     * @return Palauttaa toiminimen, jolla on korkein nimekkyys
+     */
     private String positionWithMostFame(){
         int mostFame = -1;
         String positionWithMostFame = "";
@@ -93,6 +112,13 @@ public class Person implements Comparable<Person>, Cloneable {
         return positionWithMostFame;
     }
 
+    /**
+     * Metodi, joka lisää parametrina annetun toiminimen henkilön tietoihin.
+     * Tarkastaa ensin löytyykö toiminimeä, jos ei löydy, niin lisää sen ja
+     * asettaa sen nimekkyyden arvoksi 0.
+     * 
+     * @param position 
+     */
     private void addPosition(String position) {
         if (!positions.containsKey(position)) {
             positions.put(position, 0);

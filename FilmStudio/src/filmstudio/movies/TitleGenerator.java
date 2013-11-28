@@ -55,6 +55,15 @@ public class TitleGenerator {
         return title;
     }
 
+    /**
+     * Metodi, joka parametreina annettujen listojen perusteella generoi
+     * elokuvalle nimen muotoa "adjektiivi substantiivi". Palauttaa lopuksi
+     * generoiden elokuvan nimen.
+     * 
+     * @param adjectiveList Genrepohjainen adjektiiveista koostuva lista
+     * @param nounList Genrepohjainen substantiiveista koostuva lista
+     * @return Palauttaa elokuvan nimen
+     */
     private String adjectiveNoun(List<String> adjectiveList, List<String> nounList) {
         String title = "";
 
@@ -65,6 +74,14 @@ public class TitleGenerator {
         return title;
     }
 
+    /**
+     * Metodi, joka parametrina annetun listan perusteella generoi elokuvalle
+     * nimen muotoa "The substantiivi". Palauttaa lopuksi generoidun elokuvan 
+     * nimen.
+     * 
+     * @param nounList Genrepohjainen substantiiveista koostuva lista
+     * @return Palauttaa elokuvan nimen
+     */
     private String articleNoun(List<String> nounList) {
         String title = "";
 
