@@ -25,38 +25,56 @@ public class DatabaseTest {
 
     @Test
     public void showAllMoviesCorrectly() {
-        assertEquals("Bad Grandpa (2013) Comedy 7.0/10\nDirector: Arnold Donitsi\n\n", database.showAllMovies());
+        assertEquals("Bad Grandpa (2013) Comedy 7.0/10\n" +
+                     "Director: Arnold Donitsi\n\n", database.showAllMovies());
     }
 
     @Test
     public void showAllPersonsCorrectly() {
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n\n\n", database.showAllPersons());
+        assertEquals("Arnold Donitsi\n" +
+                     "Gender: Male\n" +
+                     "Age: 42\n" +
+                     "{Director=70}\n" +
+                     "Movies involved in:\n" +
+                     "Bad Grandpa (2013) - Director\n\n\n", 
+                     database.showAllPersons());
     }
 
     @Test
     public void noNullMovies() {
         database.addMovie(null);
-        assertEquals("Bad Grandpa (2013) Comedy 7.0/10\nDirector: Arnold Donitsi\n\n", database.showAllMovies());
+        assertEquals("Bad Grandpa (2013) Comedy 7.0/10\n" +
+                     "Director: Arnold Donitsi\n\n", database.showAllMovies());
     }
     
     @Test
     public void noDuplicateMovies(){
         database.addMovie(new Movie("Bad Grandpa", 2013, "Comedy", 7.0));
-        assertEquals("Bad Grandpa (2013) Comedy 7.0/10\nDirector: Arnold Donitsi\n\n", database.showAllMovies());
+        assertEquals("Bad Grandpa (2013) Comedy 7.0/10\n" +
+                     "Director: Arnold Donitsi\n\n", database.showAllMovies());
     }
 
     @Test
     public void noNullPersons() {
         database.addPerson(null);
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n\n\n", database.showAllPersons());
+        assertEquals("Arnold Donitsi\n" +
+                     "Gender: Male\n" +
+                     "Age: 42\n" +
+                     "{Director=70}\n" +
+                     "Movies involved in:\n" +
+                     "Bad Grandpa (2013) - Director\n\n\n", 
+                     database.showAllPersons());
     }
     
     @Test
     public void noDuplicatePersons(){
         database.addPerson(new Person("Male", "Arnold", "Donitsi", 42));
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n\n\n", database.showAllPersons());
+        assertEquals("Arnold Donitsi\n" +
+                     "Gender: Male\n" +
+                     "Age: 42\n" +
+                     "{Director=70}\n" +
+                     "Movies involved in:\n" + 
+                     "Bad Grandpa (2013) - Director\n\n\n", 
+                     database.showAllPersons());
     }
 }

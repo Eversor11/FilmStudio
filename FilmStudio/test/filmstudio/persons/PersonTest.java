@@ -22,8 +22,9 @@ public class PersonTest {
 
     @Test
     public void allInfoDisplaysCorrectly() {
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n", person.allInfo());
+        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\n" +
+                     "Movies involved in:\nBad Grandpa (2013) - Director\n", 
+                     person.allInfo());
     }
 
     @Test
@@ -35,16 +36,18 @@ public class PersonTest {
     @Test
     public void fameAddedCorrectlyToExistingPosition() {
         person.addFameToPosition("Director", 10);
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=80}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n", person.allInfo());
+        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=80}\n" +
+                     "Movies involved in:\nBad Grandpa (2013) - Director\n", 
+                     person.allInfo());
     }
 
     @Test
     public void positionalFameNeverBelowZero() {
         person.addFameToPosition("Director", 10);
         person.addFameToPosition("Director", -200);
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=0}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n", person.allInfo());
+        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=0}\n" +
+                     "Movies involved in:\nBad Grandpa (2013) - Director\n", 
+                     person.allInfo());
     }
     
     @Test
@@ -62,32 +65,38 @@ public class PersonTest {
     @Test
     public void noDuplicateMovies(){
         person.addMovie(movie, "Lead Actor");
-        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\nMovies involved in:\n"
-                     + "Bad Grandpa (2013) - Director\n", person.allInfo());
+        assertEquals("Arnold Donitsi\nGender: Male\nAge: 42\n{Director=70}\n" +
+                     "Movies involved in:\nBad Grandpa (2013) - Director\n", 
+                     person.allInfo());
     }
     
     @Test
     public void personComparedCorrectly1(){
-        assertEquals(0, person.compareTo(new Person("Male", "Arnold", "Donitsi", 42)));
+        assertEquals(0, person.compareTo(
+                     new Person("Male", "Arnold", "Donitsi", 42)));
     }
     
     @Test
     public void personComparedCorrectly2(){
-        assertTrue(person.compareTo(new Person("Male", "Aarnold", "Donitsi", 42))>0);
+        assertTrue(person.compareTo(
+                   new Person("Male", "Aarnold", "Donitsi", 42))>0);
     }
     
     @Test
     public void personComparedCorrectly3(){
-        assertTrue(person.compareTo(new Person("Male", "Karnold", "Donitsi", 42))<0);
+        assertTrue(person.compareTo(
+                   new Person("Male", "Karnold", "Donitsi", 42))<0);
     }
     
     @Test
     public void personComparedCorrectly4(){
-        assertTrue(person.compareTo(new Person("Male", "Arnold", "Bonitsi", 42))>0);
+        assertTrue(person.compareTo(
+                   new Person("Male", "Arnold", "Bonitsi", 42))>0);
     }
     
     @Test
     public void personComparedCorrectly5(){
-        assertTrue(person.compareTo(new Person("Male", "Arnold", "Tonitsi", 42))<0);
+        assertTrue(person.compareTo(
+                   new Person("Male", "Arnold", "Tonitsi", 42))<0);
     }
 }

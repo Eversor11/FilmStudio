@@ -1,6 +1,7 @@
 package filmstudio.movies;
 
 import filmstudio.utilities.FileReader;
+import java.io.File;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -36,7 +37,9 @@ public class MovieMaker {
     public MovieMaker(FileReader fileReader, Random random) throws Exception {
         this.currentYear = Calendar.getInstance().get(Calendar.YEAR);
         this.random = random;
-        this.genres = fileReader.readFile("src/resources/movies/genres.txt");
+        this.genres = fileReader.readFile("resources"+File.separator+
+                                          "movies"+File.separator+
+                                          "genres.txt");
         titleGenerator = new TitleGenerator(fileReader, random);
     }
 
@@ -65,10 +68,10 @@ public class MovieMaker {
      */
     public Movie newRandom() throws Exception {
 
-        int year = year();
-        String genre = genre();
-        String title = generateTitle(genre);
-        double ratings = ratings();
+        int year = generateYear();
+        String genre = generateGenre();
+        String title = generateTitle(genre.toLowerCase());
+        double ratings = generateRatings();
 
         return new Movie(title, year, genre, ratings);
     }
@@ -84,8 +87,12 @@ public class MovieMaker {
      *                   epäonnistuttua
      */
     private String generateTitle(String genre) throws Exception {
-        return titleGenerator.generateTitle("src/resources/movies/" + genre + "_adjectives.txt",
-                "src/resources/movies/" + genre + "_nouns.txt");
+        return titleGenerator.generateTitle("resources"+File.separator +
+                                            "movies"+File.separator + 
+                                            genre + "_adjectives.txt", 
+                                            "resources"+File.separator +
+                                            "movies"+File.separator + 
+                                            genre + "_nouns.txt");
     }
 
     /**
@@ -94,7 +101,7 @@ public class MovieMaker {
      * 
      * @return Palauttaa elokuvan julkaisuvuoden
      */
-    private int year() {
+    private int generateYear() {
         return this.currentYear - random.nextInt(this.currentYear - 1949);
     }
 
@@ -104,7 +111,7 @@ public class MovieMaker {
      * 
      * @return Palauttaa elokuvan genren
      */
-    private String genre() {
+    private String generateGenre() {
         return genres.get(random.nextInt(genres.size()));
     }
 
@@ -115,7 +122,7 @@ public class MovieMaker {
      * 
      * @return Palauttaa elokuvan arvosanojen keskiarvon
      */
-    private double ratings() {
+    private double generateRatings() {
 
         double value = 0;
 

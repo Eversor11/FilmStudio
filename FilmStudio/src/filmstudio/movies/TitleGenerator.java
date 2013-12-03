@@ -40,7 +40,8 @@ public class TitleGenerator {
      * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
      *                   epäonnistuttua
      */
-    public String generateTitle(String adjectivesPath, String nounsPath) throws Exception {
+    public String generateTitle(String adjectivesPath, String nounsPath)
+                               throws Exception {
         String title = "";
 
         List<String> adjectiveList = fileReader.readFile(adjectivesPath);
@@ -64,7 +65,8 @@ public class TitleGenerator {
      * @param nounList Genrepohjainen substantiiveista koostuva lista
      * @return Palauttaa elokuvan nimen
      */
-    private String adjectiveNoun(List<String> adjectiveList, List<String> nounList) {
+    private String adjectiveNoun(List<String> adjectiveList, 
+                                 List<String> nounList) {
         String title = "";
 
         title += adjectiveList.get(random.nextInt(adjectiveList.size()));

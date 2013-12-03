@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Person-luokka, joka toteuttaa Comparable-rajapinnan ja josta luodut ilmentymät
- * pitävät sisällään kyseiseen henkilöön liittyvät tiedot
+ * Person-luokka, joka toteuttaa Comparable-rajapinnan ja josta luodut
+ * ilmentymät pitävät sisällään kyseiseen henkilöön liittyvät tiedot
  *
  * @author Eversor
  */
@@ -180,8 +180,8 @@ public class Person implements Comparable<Person>, Cloneable {
     public String showAllMovies() {
         String allMovies = "Movies involved in:\n";
         for (Movie movie : movies.keySet()) {
-            allMovies += movie.getTitle() + " (" + movie.getYear() + ") - "
-                       + movies.get(movie) + "\n";
+            allMovies += movie.getTitle() + " (" + movie.getYear() + ")" +
+                         " - " + movies.get(movie) + "\n";
         }
         return allMovies;
     }
@@ -192,8 +192,8 @@ public class Person implements Comparable<Person>, Cloneable {
      * @return Palauttaa merkkijonona kaiken oleellisen tiedon henkilöstä.
      */
     public String allInfo(){
-        return this.firstName + " " + this.surname + "\nGender: " + this.gender
-                + "\nAge: " + this.age + "\n" + positions + "\n" + showAllMovies();
+        return this.firstName + " " + this.surname + "\nGender: " + this.gender+
+               "\nAge: " + this.age + "\n" + positions + "\n" + showAllMovies();
     }
 
     @Override
@@ -237,7 +237,8 @@ public class Person implements Comparable<Person>, Cloneable {
             return false;
         }
 
-        if (this.firstName == null || !this.firstName.equals(person.getFirstName())) {
+        if (this.firstName == null ||
+            !this.firstName.equals(person.getFirstName())) {
             return false;
         }
 
@@ -255,11 +256,13 @@ public class Person implements Comparable<Person>, Cloneable {
     @Override
     public int hashCode() {
 
-        if (this.gender == null || this.firstName == null || this.surname == null) {
+        if (this.gender == null || this.firstName == null || 
+            this.surname == null) {
             return this.age;
         }
 
-        return this.age + this.gender.hashCode() + this.firstName.hashCode() + this.surname.hashCode();
+        return this.age + this.gender.hashCode() + this.firstName.hashCode() + 
+               this.surname.hashCode();
     }
     
     @Override

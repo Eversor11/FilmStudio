@@ -9,9 +9,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.font.TextAttribute;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -327,7 +329,7 @@ public class SearchUI extends javax.swing.JFrame {
 
         personLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
-        personHomeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/gui/home.png"))); // NOI18N
+        personHomeButton.setIcon(new ImageIcon("resources"+File.separator+"gui"+File.separator+"home.png"));
         personHomeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         personHomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -487,7 +489,7 @@ public class SearchUI extends javax.swing.JFrame {
 
         movieLabel.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
 
-        movieHomeButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/gui/home.png"))); // NOI18N
+        movieHomeButton.setIcon(new ImageIcon("resources"+File.separator+"gui"+File.separator+"home.png"));
         movieHomeButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         movieHomeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -738,11 +740,15 @@ public class SearchUI extends javax.swing.JFrame {
      */
     private void peopleTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_peopleTableMousePressed
         if(peopleTable.rowAtPoint(evt.getPoint()) == -1){
-            personModel.fireTableDataChanged(); //purkkaviritys, koska personTable.clearSelection() jättää solun valinnan
+            personModel.fireTableDataChanged(); 
+            //purkkaviritys, koska personTable.clearSelection() 
+            //jättää solun valinnan
         }
         
         if(evt.getClickCount() == 2 && peopleTable.getSelectedRow() > -1){
-            inspectedPerson = (Person) peopleTable.getValueAt(peopleTable.getSelectedRow(), 0);
+            inspectedPerson = (Person) peopleTable.
+                                       getValueAt(peopleTable.
+                                       getSelectedRow(), 0);
             updatePersonCard(inspectedPerson);
             navigationStack.push("search");
             cardLayout.show(getContentPane(), "person");
@@ -760,11 +766,15 @@ public class SearchUI extends javax.swing.JFrame {
      */
     private void movieTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieTableMousePressed
         if(movieTable.rowAtPoint(evt.getPoint()) == -1){
-            movieModel.fireTableDataChanged(); //purkkaviritys, koska movieTable.clearSelection() jättää solun valinnan
+            movieModel.fireTableDataChanged();
+            //purkkaviritys, koska movieTable.clearSelection() 
+            //jättää solun valinnan
         }
              
         if(evt.getClickCount() == 2 && movieTable.getSelectedRow() > -1){
-            inspectedMovie = (Movie) movieTable.getValueAt(movieTable.getSelectedRow(), 0);
+            inspectedMovie = (Movie) movieTable.
+                                     getValueAt(movieTable.
+                                     getSelectedRow(), 0);
             updateMovieCard(inspectedMovie);
             navigationStack.push("search");
             cardLayout.show(getContentPane(), "movie");
@@ -846,7 +856,8 @@ public class SearchUI extends javax.swing.JFrame {
     }//GEN-LAST:event_movieLeadActorLabelMouseExited
 
     private void movieSupportingActorLabelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_movieSupportingActorLabelMousePressed
-        inspectedPerson = inspectedMovie.getCastAndCrew().get("Supporting Actor");
+        inspectedPerson = inspectedMovie.getCastAndCrew().
+                                         get("Supporting Actor");
         updatePersonCard(inspectedPerson);
         pushInspectedMovie();
         navigationStack.push("movie");
@@ -873,11 +884,15 @@ public class SearchUI extends javax.swing.JFrame {
      */
     private void moviesInvolvedTableMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_moviesInvolvedTableMousePressed
         if(moviesInvolvedTable.rowAtPoint(evt.getPoint()) == -1){
-            moviesInvolvedModel.fireTableDataChanged(); //purkkaviritys, koska moviesInvolvedTable.clearSelection() jättää solun valinnan
+            moviesInvolvedModel.fireTableDataChanged(); 
+            //purkkaviritys, koska moviesInvolvedTable.clearSelection() 
+            //jättää solun valinnan
         }
 
         if(evt.getClickCount() == 2 && moviesInvolvedTable.getSelectedRow() > -1){
-            inspectedMovie = (Movie) moviesInvolvedTable.getValueAt(moviesInvolvedTable.getSelectedRow(), 0);
+            inspectedMovie = (Movie) moviesInvolvedTable.
+                                     getValueAt(moviesInvolvedTable.
+                                     getSelectedRow(), 0);
             updateMovieCard(inspectedMovie);
             pushInspectedPerson();
             navigationStack.push("person");
@@ -902,8 +917,11 @@ public class SearchUI extends javax.swing.JFrame {
     }//GEN-LAST:event_movieHomeButtonActionPerformed
 
     private void updatePersonCard(Person person){
-        personLabel.setText(person.getFirstName()+" "+person.getSurname()+", "+person.getPosition());
-        personNameLabel.setText(person.getFirstName()+" "+person.getSurname());
+        personLabel.setText(person.getFirstName()+" "+
+                            person.getSurname()+", "+
+                            person.getPosition());
+        personNameLabel.setText(person.getFirstName()+" "+
+                                person.getSurname());
         personGenderLabel.setText(person.getGender());
         personAgeLabel.setText(""+person.getAge());
         personPositionLabel.setText(person.getPosition());
@@ -916,10 +934,14 @@ public class SearchUI extends javax.swing.JFrame {
         movieYearLabel.setText(""+movie.getYear());
         movieGenreLabel.setText(movie.getGenre());
         movieRatingsLabel.setText(""+movie.getRatings()+" / 10");
-        movieDirectorLabel.setText(movie.getCastAndCrew().get("Director").toString());
-        movieScreenwriterLabel.setText(movie.getCastAndCrew().get("Screenwriter").toString());
-        movieLeadActorLabel.setText(movie.getCastAndCrew().get("Lead Actor").toString());
-        movieSupportingActorLabel.setText(movie.getCastAndCrew().get("Supporting Actor").toString());
+        movieDirectorLabel.setText(movie.getCastAndCrew().
+                                   get("Director").toString());
+        movieScreenwriterLabel.setText(movie.getCastAndCrew().
+                                   get("Screenwriter").toString());
+        movieLeadActorLabel.setText(movie.getCastAndCrew().
+                                   get("Lead Actor").toString());
+        movieSupportingActorLabel.setText(movie.getCastAndCrew().
+                                   get("Supporting Actor").toString());
     }
     
     /**
@@ -973,7 +995,8 @@ public class SearchUI extends javax.swing.JFrame {
     private void errorPopUp(Exception e){
         JOptionPane.showMessageDialog(this, "An error has occurred:\n"
                     +e.getMessage()+"\n\nRestart the program for safe usage as "
-                    + "some features may not work.", "Error", JOptionPane.ERROR_MESSAGE);
+                    + "some features may not work.", "Error", 
+                    JOptionPane.ERROR_MESSAGE);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

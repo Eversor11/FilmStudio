@@ -1,6 +1,5 @@
 package filmstudio;
 
-import filmstudio.data.DataSearch;
 import filmstudio.data.Database;
 import filmstudio.data.HistoryGenerator;
 import filmstudio.gui.SearchUI;
@@ -23,7 +22,6 @@ public class FilmStudio {
         Random random = new Random();
         FileReader fileReader = new FileReader();
         Database database = new Database();
-        DataSearch dataSearch = new DataSearch(database);
         MovieMaker movieMaker;
         PersonCreator personCreator;
         HistoryGenerator historyGenerator;
@@ -35,12 +33,14 @@ public class FilmStudio {
         try{
             movieMaker = new MovieMaker(fileReader, random);
             personCreator = new PersonCreator(fileReader, random);
-            historyGenerator = new HistoryGenerator(database, movieMaker, personCreator, fileReader);
+            historyGenerator = new HistoryGenerator(database, movieMaker, 
+                                                    personCreator, fileReader);
             historyGenerator.generateHistory(10);
         } catch(Exception e){
             JOptionPane.showMessageDialog(searchUI, "An error has occurred:\n"
                     +e.getMessage()+"\n\nRestart the program for safe usage as "
-                    + "some features may not work.", "Error", JOptionPane.ERROR_MESSAGE);
+                    + "some features may not work.", "Error", 
+                    JOptionPane.ERROR_MESSAGE);
             System.out.println("Error: "+e.getMessage()); // testejä varten
         }
         

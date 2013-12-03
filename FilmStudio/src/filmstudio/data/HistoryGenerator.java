@@ -5,6 +5,7 @@ import filmstudio.movies.MovieMaker;
 import filmstudio.persons.Person;
 import filmstudio.persons.PersonCreator;
 import filmstudio.utilities.FileReader;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,11 +47,15 @@ public class HistoryGenerator {
      *                   epäonnistuttua
      */
     public HistoryGenerator(Database database, MovieMaker movieMaker,
-            PersonCreator personCreator, FileReader fileReader) throws Exception {
+           PersonCreator personCreator, FileReader fileReader) 
+           throws Exception {
         this.database = database;
         this.movieMaker = movieMaker;
         this.personCreator = personCreator;
-        this.castAndCrewPositions = fileReader.readFile("src/resources/data/castAndCrewPositions.txt");
+        this.castAndCrewPositions = fileReader.readFile(
+                                    "resources"+File.separator+
+                                    "data"+File.separator+
+                                    "castAndCrewPositions.txt");
     }
 
     /**
@@ -68,9 +73,11 @@ public class HistoryGenerator {
     public void generateHistory(int movieCount) throws Exception {
         for (int i = 0; i < movieCount; i++) {
             Movie movie = movieMaker.newRandom();
-            List<Person> castAndCrew = createCastAndCrew(movie, castAndCrewPositions.size());
+            List<Person> castAndCrew = createCastAndCrew(
+                                       movie, castAndCrewPositions.size());
             for(int j = 0; j < castAndCrewPositions.size(); j++){
-                movie.addToCastAndCrew(castAndCrewPositions.get(j), castAndCrew.get(j));
+                movie.addToCastAndCrew(castAndCrewPositions.get(j), 
+                                       castAndCrew.get(j));
                 castAndCrew.get(j).addMovie(movie,castAndCrewPositions.get(j));
             }
             database.addMovie(movie);
@@ -91,10 +98,12 @@ public class HistoryGenerator {
      * @throws Exception Mahdollinen poikkeus, joka heitetään henkilöiden 
      *                   luomisen yhteydessä
      */
-    private List<Person> createCastAndCrew(Movie movie, int positionCount) throws Exception {
+    private List<Person> createCastAndCrew(Movie movie, int positionCount)
+            throws Exception {
         List<Person> castAndCrew = new ArrayList<Person>();
         for (int i = 0; i < positionCount; i++) {
-            Person person = personCreator.newRandom(movieMaker.getCurrentYear() - movie.getYear());
+            Person person = personCreator.newRandom(movieMaker.getCurrentYear()- 
+                                                    movie.getYear());
             castAndCrew.add(person);
             database.addPerson(person);
         }

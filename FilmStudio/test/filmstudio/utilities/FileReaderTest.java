@@ -1,5 +1,6 @@
 package filmstudio.utilities;
 
+import java.io.File;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,12 +17,16 @@ public class FileReaderTest {
 
     @Test (expected = Exception.class)
     public void fileNotFoundThrowsException() throws Exception {
-        List<String> lines = fileReader.readFile("test/resources/utilities/notfound.txt");
+        List<String> lines = fileReader.readFile("resources"+File.separator+
+                                                 "utilities"+File.separator+
+                                                 "notfound.txt");
     }
 
     @Test
     public void linesReadMatchTheContent() throws Exception {
-        List<String> lines = fileReader.readFile("test/resources/utilities/test.txt");
+        List<String> lines = fileReader.readFile("resources"+File.separator+
+                                                 "utilities"+File.separator+
+                                                 "test.txt");
 
         assertEquals("first", lines.get(0));
         assertEquals("second", lines.get(1));

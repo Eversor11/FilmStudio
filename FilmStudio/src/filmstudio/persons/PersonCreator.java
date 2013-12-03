@@ -1,6 +1,7 @@
 package filmstudio.persons;
 
 import filmstudio.utilities.FileReader;
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -32,12 +33,18 @@ public class PersonCreator {
      * @throws Exception Mahdollinen poikkeus, joka heitetään tiedoston luvun
      *                   epäonnistuttua
      */
-    public PersonCreator(FileReader fileReader, Random random) throws Exception {
+    public PersonCreator(FileReader fileReader, Random random) throws Exception{
         this.random = random;
         nameGenerator = new NameGenerator(random);
-        maleNames = fileReader.readFile("src/resources/persons/maleNames.txt");
-        femaleNames = fileReader.readFile("src/resources/persons/femaleNames.txt");
-        surnames = fileReader.readFile("src/resources/persons/surnames.txt");
+        maleNames = fileReader.readFile("resources"+File.separator+
+                                        "persons"+File.separator+
+                                        "maleNames.txt");
+        femaleNames = fileReader.readFile("resources"+File.separator+
+                                          "persons"+File.separator+
+                                          "femaleNames.txt");
+        surnames = fileReader.readFile("resources"+File.separator+
+                                       "persons"+File.separator+
+                                       "surnames.txt");
     }
 
     /**

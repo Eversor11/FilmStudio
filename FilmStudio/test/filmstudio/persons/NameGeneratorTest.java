@@ -1,10 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package filmstudio.persons;
 
 import filmstudio.utilities.FileReader;
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 import org.junit.Before;
@@ -39,7 +36,9 @@ public class NameGeneratorTest {
         nameGenerator2 = new NameGenerator(random2);
         nameGenerator3 = new NameGenerator(random3);
         nameGenerator4 = new NameGenerator(random4);
-        test = fileReader.readFile("test/resources/persons/test.txt");
+        test = fileReader.readFile("resources"+File.separator+
+                                   "persons"+File.separator+
+                                   "test.txt");
     }
     
     @Test

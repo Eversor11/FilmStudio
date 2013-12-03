@@ -39,7 +39,8 @@ public class DataSearchTest {
     
     @Test
     public void personFoundCorrectly1(){
-        assertEquals(foundPerson, dataSearch.searchPersonByName("Arnold Donitsi"));
+        assertEquals(foundPerson, 
+                     dataSearch.searchPersonByName("Arnold Donitsi"));
     }
     
     @Test

@@ -89,8 +89,9 @@ public class Movie implements Comparable<Movie>, Cloneable {
     public String showAllCastAndCrew() {
         String allCastAndCrew = "";
         for (String position : castAndCrew.keySet()) {
-            allCastAndCrew += position + ": " + castAndCrew.get(position).getFirstName()
-                    + " " + castAndCrew.get(position).getSurname() + "\n";
+            allCastAndCrew += position + ": " + 
+                              castAndCrew.get(position).getFirstName() + " " + 
+                              castAndCrew.get(position).getSurname() + "\n";
         }
         return allCastAndCrew;
     }
@@ -124,7 +125,8 @@ public class Movie implements Comparable<Movie>, Cloneable {
      * elokuvasta
      */
     public String allInfo() {
-        return this.title + " (" + this.year + ") " + this.genre + " " + this.ratings + "/10\n" + showAllCastAndCrew();
+        return this.title + " (" + this.year + ") " + this.genre + " " + 
+               this.ratings + "/10\n" + showAllCastAndCrew();
     }
 
     @Override
@@ -183,7 +185,8 @@ public class Movie implements Comparable<Movie>, Cloneable {
             return this.year + (int) (this.ratings * 10);
         }
 
-        return this.year + (int) (this.ratings * 10) + this.title.hashCode() + this.genre.hashCode();
+        return this.year + (int) (this.ratings * 10) + this.title.hashCode() + 
+               this.genre.hashCode();
     }
     
     @Override

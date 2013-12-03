@@ -18,3 +18,4 @@
 26.11.2013 3h GUI-säätöä
 27.11.2013 4h GUI-säätöä
 28.11.2013 4h GUI-säätöä, JavaDocia, sekvenssikaavio ja rakennekuvaus
+03.12.2013 2h Viimeisiä silauksia ja muokattu koodin ulkoasua niin, ettei 80 merkin rivimäärä ylity

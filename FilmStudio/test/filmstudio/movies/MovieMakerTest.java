@@ -1,4 +1,3 @@
-
 package filmstudio.movies;
 
 import filmstudio.utilities.FileReader;
@@ -30,14 +29,16 @@ public class MovieMakerTest {
     
     @Test
     public void currentYearIsCorrect(){
-        assertEquals(Calendar.getInstance().get(Calendar.YEAR), movieMaker.getCurrentYear());
+        assertEquals(Calendar.getInstance().get(Calendar.YEAR), 
+                     movieMaker.getCurrentYear());
     }
     
     @Test
     public void currentYearIncrementedCorrectly(){
         movieMaker.incrementCurrentYear();
         
-        assertEquals(Calendar.getInstance().get(Calendar.YEAR)+1, movieMaker.getCurrentYear());      
+        assertEquals(Calendar.getInstance().get(Calendar.YEAR)+1, 
+                     movieMaker.getCurrentYear());      
     }
     
     @Test

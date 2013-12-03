@@ -1,7 +1,7 @@
-
 package filmstudio.movies;
 
 import filmstudio.utilities.FileReader;
+import java.io.File;
 import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,16 +31,18 @@ public class TitleGeneratorTest {
     
     @Test
     public void title1GeneratedCorrectly() throws Exception {
-        String title = titleGenerator1.generateTitle("test/resources/movies/test-adjective.txt", 
-                                                     "test/resources/movies/test-noun.txt");
+        String title = titleGenerator1.generateTitle(
+        "resources"+File.separator+"movies"+File.separator+"test-adjective.txt", 
+        "resources"+File.separator+"movies"+File.separator+"test-noun.txt");
         
         assertEquals("adjective noun", title);
     }
     
     @Test
     public void title2GeneratedCorrectly() throws Exception {
-        String title = titleGenerator2.generateTitle("test/resources/movies/test-adjective.txt", 
-                                                     "test/resources/movies/test-noun.txt");
+        String title = titleGenerator2.generateTitle(
+        "resources"+File.separator+"movies"+File.separator+"test-adjective.txt", 
+        "resources"+File.separator+"movies"+File.separator+"test-noun.txt");
         
         assertEquals("The noun", title);
     }
