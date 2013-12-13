@@ -1,7 +1,9 @@
+Käynnistys: java -jar FilmStudio.jar komentokehoitteessa/terminalissa
+
 Hakuikkunassa hae sanahaulla henkilöitä ja elokuvia. Jätä tyhjäksi, jos haluat nähdä kaiken.
 Taulukkoa voidaan sortata sarakkeittain klikkaamalla sarakkeen nimeä ja halutessaan voi
 myös vaihtaa sarakkeiden paikkoja drag-and-droppaamalla sarakkeiden nimistä.
 Taulukon rivejä tuplaklikkaamalla pääset näkemään tarkempia tietoja henkilöistä ja elokuvista.
 Home-napilla pääse takaisin hakuikkunaan ja back-napilla pääset takaisin edelliseen ruutuun.
 
-Toimivuus testattu Windows 7:lla.
+Toimivuus testattu Windows 7:lla, 8:lla ja Linuxilla.

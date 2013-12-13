@@ -1,12 +1,13 @@
-Ohjelma rakentuu FilmStudio-luokan päälle (main), jossa luodaan kaikki pääluokkien ilmentymät,
+Ohjelma rakentuu FilmStudio-luokan päälle (main), jossa luodaan kaikki pääluokkien ilmentymät
 sekä käyttöliittymä. Matalimman tason luokkia ovat DataSearch-, Database- ja HistoryGenerator-
 luokat. Database-luokkaan tallennetaan Movie- ja Person-luokkien ilmentymiä ja nämä ovatkin
 luomisen jälkeen olemassaoloriippuvaisia Database-luokasta. Henkilö voi kuulua moneen tai ei
 yhteenkään elokuvaan, mutta elokuvalla täytyy olla vähintään yksi henkilö, joka sitä on tehnyt.
 
-DataSearch-luokan avulla voidaan etsiä merkkijonoilla sopivia henkilöitä ja elokuvia. Tämän
-takia niiden välillä on väliaikainen käyttöyhteys. HistoryGenerator-luokka käyttää Database-,
-PersonCreator- ja MovieMaker-luokkia luodessaan ohjelmalle elokuva- ja henkilöhistorian.
-MovieMaker- ja PersonCreator- luokat generoivat uusia Movie- ja Person-luokkien ilmentymiä ja
-nämä käyttävätkin siinä apunaan omia nimigeneraattori-luokkiaan. FileReader-luokka on yleis-
-käyttöinen tiedostonlukemiseen tarkoitettu luokka, jota monet muut luokat käyttävät.
+Käyttöliittymästä voidaan DataSearch-luokan avulla etsiä merkkijonoilla sopivia henkilöitä ja
+elokuvia. Tämän takia DataSearch-luokalla on väliaikainen käyttöyhteys henkilöihin ja elokuviin. 
+HistoryGenerator-luokka käyttää Database-, PersonCreator- ja MovieMaker-luokkia luodessaan 
+ohjelmalle elokuva- ja henkilöhistorian. MovieMaker- ja PersonCreator- luokat generoivat uusia 
+Movie- ja Person-luokkien ilmentymiä ja nämä käyttävätkin siinä apunaan omia nimigeneraattori
+-luokkiaan. FileReader-luokka on yleiskäyttöinen tiedostonlukemiseen tarkoitettu luokka, jota 
+monet muut luokat käyttävät.
